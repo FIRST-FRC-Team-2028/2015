@@ -1,6 +1,6 @@
 package com.phantommentalists.Twenty15;
 
 
-public class Outfeed {
+public class VisionSystem {
 
 }
