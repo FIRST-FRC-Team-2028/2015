@@ -11,8 +11,6 @@ public class Drive {
     private CANTalon frontRight;
     private CANTalon rearLeft;
     private CANTalon rearRight;
-    private TurnPIDOut turnPIDOut;
-    private DrivePIDOut drivePIDOut;
 
   /** 
    *  This method allows for driving forward and strafing.

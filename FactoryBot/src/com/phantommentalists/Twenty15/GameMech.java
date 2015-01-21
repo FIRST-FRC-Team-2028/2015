@@ -11,7 +11,7 @@ public class GameMech {
       private Stacker stacker;
     private GameMechState state;
     private Outfeed outfeed;
-    private Infeed+ infeed;
+    private Infeed infeed;
     private Relay readyLight;
 
   /** 

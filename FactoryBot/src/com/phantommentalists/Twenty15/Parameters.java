@@ -1,28 +1,26 @@
 package com.phantommentalists.Twenty15;
 
-import Integer;
-
 public class Parameters {
 
-  public static final Integer frontDriveCanId;
+  public static final int frontDriveCanId=0;
 
-  public static final Integer frontLeftSteeringCanId;
+  public static final int frontLeftSteeringCanId=0;
 
-  public static final Integer frontRightCanId;
+  public static final int frontRightCanId=0;
 
-  public static final Integer rearCanId;
+  public static final int rearCanId=0;
 
-  public static final Integer rearLeftSteeringCanId;
+  public static final int rearLeftSteeringCanId=0;
 
-  public static final Integer rearRightSteeringCanId;
+  public static final int rearRightSteeringCanId=0;
 
-  public static final Integer steeringProportionalValue;
+  public static final int steeringProportionalValue=0;
 
-  public static final Integer steeringIntegralValue;
+  public static final int steeringIntegralValue=0;
 
-  public static final Integer steeringDerivativeValue;
+  public static final int steeringDerivativeValue=0;
 
-  public static final Integer maxMotorVoltage;
+  public static final int maxMotorVoltage=0;
 
   
 }

@@ -10,7 +10,6 @@ public class PhantomOne extends SampleRobot {
 
     private Drive drive;
     public GameMech gameMech;
-    public final Parameters parameters;
     private Gyro gyro;
     private Odometer odometer;
     private PIDController driveController;
