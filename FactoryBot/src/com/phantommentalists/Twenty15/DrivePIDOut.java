@@ -1,4 +1,4 @@
-package com.phantommentalists.Recycle Rush;
+package com.phantommentalists.RecycleRush;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 /*
  */
-public class Infeed+ {
+public class Infeed {
 
       private Solenoid infeedDeploy;
 
