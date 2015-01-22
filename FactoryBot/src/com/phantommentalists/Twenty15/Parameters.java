@@ -20,7 +20,7 @@ public class Parameters {
 
   public static final int steeringDerivativeValue=0;
 
-  public static final int maxMotorVoltage=0;
+  public static final int maxMotorVoltage=12;
 
   
 }
