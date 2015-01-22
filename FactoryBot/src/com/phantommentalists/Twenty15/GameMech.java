@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.Relay;
  */
 public class GameMech {
 
-  public boolean autoStacking;
+	private boolean autoStacking;
 
-      private Stacker stacker;
+    private Stacker stacker;
     private GameMechState state;
     private Outfeed outfeed;
     private Infeed infeed;
