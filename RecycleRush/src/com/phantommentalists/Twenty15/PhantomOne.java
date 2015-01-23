@@ -17,7 +17,7 @@ public class PhantomOne extends SampleRobot {
 
     public PhantomOne()
     {
-    	
+    	 
     }
     
   public void autonomous() {
