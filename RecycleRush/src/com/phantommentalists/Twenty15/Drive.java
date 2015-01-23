@@ -7,19 +7,13 @@ import edu.wpi.first.wpilibj.CANTalon;
  */
 public class Drive {
 
-    private CANTalon frontLeft;
+      private static CANTalon frontLeft;
     private CANTalon frontRight;
     private CANTalon rearLeft;
     private CANTalon rearRight;
+    private TurnPIDOut turnPIDOut;
+    private DrivePIDOut drivePIDOut;
 
-    
-    public Drive()
-    {
-    	frontLeft = new CANTalon(10);
-    	frontRight = new CANTalon(20);
-    	rearLeft = new CANTalon(30);
-    	rearRight = new CANTalon(40);
-    }
   /** 
    *  This method allows for driving forward and strafing.
    */

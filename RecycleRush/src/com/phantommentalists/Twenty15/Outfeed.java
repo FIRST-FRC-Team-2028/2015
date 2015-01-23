@@ -3,19 +3,17 @@ package com.phantommentalists.Twenty15;
 import java.util.Vector;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Solenoid;
 
 /*
- * 
  */
 public class Outfeed {
 
-    private VictorSP pusher;
+      private VictorSP pusher;
     private VictorSP roller;
     private DigitalInput leftLimit;
     private DigitalInput rightLimit;
     private DigitalInput toteOut;
-    private Solenoid  outfeedDeploy;
+    public Vector  outfeedDeploy;
 
   /** 
    *  This method will move a stack forward in the outfeed.

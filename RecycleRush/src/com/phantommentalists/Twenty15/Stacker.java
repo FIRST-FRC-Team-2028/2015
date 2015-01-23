@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class Stacker {
 
-    private VictorSP rollerMotor;
+      private VictorSP rollerMotor;
     private StackerState state;
     private Elevator leftElevator;
     private Solenoid outfeedPin;
