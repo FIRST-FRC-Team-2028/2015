@@ -9,12 +9,17 @@ import edu.wpi.first.wpilibj.PIDController;
 public class PhantomOne extends SampleRobot {
 
     private Drive drive;
-    public GameMech gameMech;
+    private GameMech gameMech;
     private Gyro gyro;
     private Odometer odometer;
     private PIDController driveController;
     private PIDController turnController;
 
+    public PhantomOne()
+    {
+    	
+    }
+    
   public void autonomous() {
   }
 
