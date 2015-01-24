@@ -1,20 +1,41 @@
 package com.phantommentalists.Twenty15;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Solenoid;
 
 /*
  * Author: Hunter Lawrence
  */
 public class Stacker {
 
-      private VictorSP rollerMotor;
+    private CANTalon conveyorMotor;
     private StackerState state;
-    private Elevator leftElevator;
-    private Elevator rightElevator;
+    private Elevator elevator;
     private DigitalInput toteIndicator;
 
+  public Stacker()
+  {
+	  state = StackerState.Unknown;
+	  elevator = new Elevator(Parameters.leftElevatorCANId,Parameters.rightElevatorCANId);
+	  conveyorMotor = new CANTalon(Parameters.conveyorCANId);
+  }
+  public void update()
+  {
+	  if(toteIndicator.get())
+	  {
+		  state = StackerState.LoweringTote;
+	  }
+	  if(state == StackerState.LoweringTote && isElevatorDown())
+	  {
+		  state = StackerState.LiftingTote;
+	  }
+	  if(state == StackerState.LiftingTote)
+	  {
+		  
+	  }
+	  
+	  elevator.update();
+  }
   /** 
    *  This method indicates if the Stacker is empty. Returns true if the stacker is empty, false otherwise.
    */
@@ -26,6 +47,7 @@ public class Stacker {
    *  This method instructs the stacker to build a stack of totes given the supplied height.
    */
   public void createStack(int height) {
+	  
   }
 
   /** 
@@ -39,6 +61,16 @@ public class Stacker {
    *  This method will empty the stacker by lowering the current stack (if necessary) and turning on the conveyor/rollers.
    */
   public void emptyStacker() {
+	  if(state == StackerState.WaitingForTote)
+	  {
+		  elevator.goDown();
+		  state = StackerState.Unloading;
+	  }
+	  else if(state == StackerState.Unloading)
+	  {
+		  
+	  }
+	  
   }
 
   /** 
@@ -60,12 +92,14 @@ public class Stacker {
    *  This method moves the elevator to the up position.
    */
   public void moveElevatorUp() {
+	  elevator.goUp();
   }
 
   /** 
    *  This method moves the elevator to the down position.
    */
   public void moveElevatorDown() {
+	  elevator.goDown();
   }
 
   /** 
@@ -92,14 +126,20 @@ public class Stacker {
    *  This method returns true if the elevator is up, false otherwise.
    */
   public boolean isElevatorUp() {
-  return false;
+	  if(elevator.isUp())
+		  return true;
+	  else
+		  return false;
   }
 
   /** 
    *  This method returns true if the elevator is down, false otherwise.
    */
   public boolean isElevatorDown() {
-  return false;
+	  if(elevator.isDown())
+		  return true;
+	  else
+		  return false;
   }
 
   public boolean toteReadyForStack() {
