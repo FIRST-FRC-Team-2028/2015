@@ -3,6 +3,7 @@ package com.phantommentalists.Twenty15;
 import edu.wpi.first.wpilibj.CANTalon;
 
 /*
+ * Author: Hunter Lawrence
  */
 public class Elevator {
 
