@@ -12,7 +12,6 @@ public class Stacker {
       private VictorSP rollerMotor;
     private StackerState state;
     private Elevator leftElevator;
-    private Solenoid outfeedPin;
     private Elevator rightElevator;
     private DigitalInput toteIndicator;
 

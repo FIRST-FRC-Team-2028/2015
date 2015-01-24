@@ -7,12 +7,23 @@ import edu.wpi.first.wpilibj.CANTalon;
  */
 public class Elevator {
 
-      private CANTalon elevatorMotor;
-  
+      private CANTalon leftMotor;
+      private CANTalon rightMotor;
+  public Elevator(int leftCANID,int rightCANID)
+  {
+	  leftMotor = new CANTalon(leftCANID);
+	  rightMotor = new CANTalon(rightCANID);
+	  
+	  //leftMotor.
+	  
+	  leftMotor.enableControl();
+	  rightMotor.enableControl();
+  }
   /** 
    *  This method moves the elevator side to the up position.
    */
   public void goUp() {
+	  
   }
 
   /** 
