@@ -9,9 +9,11 @@ public enum StackerState {
 
   WaitingForTote,
 
-  LoweringTote,
+  LoweringElevator,
 
-  LiftingTote,
+  RaiseingElevator,
+  
+  TotePickedUp,
 
   Unloading;
 

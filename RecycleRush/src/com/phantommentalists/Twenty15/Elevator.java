@@ -23,7 +23,10 @@ public class Elevator {
   }
   public void update()
   {
-	  
+	  if(isUp() || isDown())
+	  {
+		  stop();
+	  }
   }
   /** 
    *  This method moves the elevator side to the up position.
@@ -47,6 +50,28 @@ public class Elevator {
   {
 	  leftMotor.set(0.0);
 	  rightMotor.set(0.0);
+  }
+  public boolean isRaising()
+  {
+	  if(leftMotor.getBusVoltage() > 0.0 && rightMotor.getBusVoltage() > 0.0)
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
+  public boolean isLowering()
+  {
+	  if(leftMotor.getBusVoltage() > 0.0 && rightMotor.getBusVoltage() > 0.0)
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
   }
   /** 
    *  This method return true if the elevator side is up, false otherwise.

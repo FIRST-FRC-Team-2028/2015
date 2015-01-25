@@ -1,6 +1,7 @@
 package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /*
@@ -12,28 +13,47 @@ public class Stacker {
     private StackerState state;
     private Elevator elevator;
     private DigitalInput toteIndicator;
+    private int currentstackheight = 0;
+    private int desiredstackheight = -1;
 
   public Stacker()
   {
 	  state = StackerState.Unknown;
 	  elevator = new Elevator(Parameters.leftElevatorCANId,Parameters.rightElevatorCANId);
 	  conveyorMotor = new CANTalon(Parameters.conveyorCANId);
+	  conveyorMotor.changeControlMode(ControlMode.PercentVbus);
+	  conveyorMotor.enableControl();
   }
   public void update()
   {
-	  if(toteIndicator.get())
+	  if(toteIndicator.get() && isElevatorDown())
 	  {
-		  state = StackerState.LoweringTote;
+		  currentstackheight++;
 	  }
-	  if(state == StackerState.LoweringTote && isElevatorDown())
+	  if(state == StackerState.Unknown)
 	  {
-		  state = StackerState.LiftingTote;
+		  moveElevatorUp();
 	  }
-	  if(state == StackerState.LiftingTote)
+	  if(isElevatorUp() && state == StackerState.RaiseingElevator)
 	  {
-		  
+		  state = StackerState.WaitingForTote;
 	  }
-	  
+	  if(state == StackerState.LoweringElevator && isElevatorDown())
+	  {
+		  state = StackerState.TotePickedUp;
+	  }
+	  if(state == StackerState.Unloading)
+	  {
+		  if(isConveyorOn() && !toteIndicator.get())
+		  {
+			  moveElevatorUp();
+			  currentstackheight = 0;
+		  }
+		  else if(!isConveyorOn())
+		  {
+			  emptyStacker();
+		  }
+	  }
 	  elevator.update();
   }
   /** 
@@ -47,14 +67,21 @@ public class Stacker {
    *  This method instructs the stacker to build a stack of totes given the supplied height.
    */
   public void createStack(int height) {
-	  
+	  desiredstackheight = height;
   }
 
   /** 
    *  Returns true when the current stack is finished, false otherwise
    */
   public boolean isStackDone() {
-  return false;
+	  if(currentstackheight == desiredstackheight)
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
   }
 
   /** 
@@ -63,29 +90,28 @@ public class Stacker {
   public void emptyStacker() {
 	  if(state == StackerState.WaitingForTote)
 	  {
-		  elevator.goDown();
+		  moveElevatorDown();
 		  state = StackerState.Unloading;
 	  }
-	  else if(state == StackerState.Unloading)
+	  else if(state == StackerState.Unloading && isElevatorDown())
 	  {
-		  
+		  conveyorMotor.set(1.0);
 	  }
-	  
   }
-
-  /** 
-   *  This method will open the outfeed locking pin.
-   */
-  public void openOutfeed() {
-  }
-
   /** 
    *  This method returns true when the elevator is in the up position when we are building a stack or 
    *  the stacker is empty, false otherwise. This method will be called by GameMech when determining
    *  whether to light the red or green indicators.
    */
   public boolean isStackerReadyForTote() {
-  return false;
+	  if(state == StackerState.WaitingForTote)
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
   }
 
   /** 
@@ -93,6 +119,7 @@ public class Stacker {
    */
   public void moveElevatorUp() {
 	  elevator.goUp();
+	  state = StackerState.RaiseingElevator;
   }
 
   /** 
@@ -100,21 +127,25 @@ public class Stacker {
    */
   public void moveElevatorDown() {
 	  elevator.goDown();
+	  state = StackerState.LoweringElevator;
   }
-
-  /** 
-   *  This method closes the outfeed locking pin.
-   */
-  public void closeOutfeed() {
-  }
-
   /** 
    *  This method returns the Stacker's current state.
    */
   public StackerState getState() {
-  return null;
+	  return state;
   }
-
+  public boolean isConveyorOn()
+  {
+	  if(conveyorMotor.getBusVoltage() != 0.0)
+	  {
+		  return true;
+	  }
+	  else
+	  {
+		  return false;
+	  }
+  }
   /** 
    *  This method returns true if the Stacker is building a stack (autonomously), false otherwise.
    */
