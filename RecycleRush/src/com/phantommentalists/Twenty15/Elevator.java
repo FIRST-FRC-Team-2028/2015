@@ -18,15 +18,18 @@ public class Elevator {
 	  leftMotor.changeControlMode(ControlMode.PercentVbus);
 	  rightMotor.changeControlMode(ControlMode.PercentVbus);
 	  
+	  leftMotor.enableLimitSwitch(true, true);
+	  rightMotor.enableLimitSwitch(true, true);
+	  
 	  leftMotor.enableControl();
 	  rightMotor.enableControl();
   }
-  public void update()
+  public void processElevator()
   {
 	  if(isUp() || isDown())
 	  {
 		  stop();
-	  }
+	  } 
   }
   /** 
    *  This method moves the elevator side to the up position.

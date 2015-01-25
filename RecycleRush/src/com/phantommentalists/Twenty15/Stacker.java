@@ -24,7 +24,7 @@ public class Stacker {
 	  conveyorMotor.changeControlMode(ControlMode.PercentVbus);
 	  conveyorMotor.enableControl();
   }
-  public void update()
+  public void processStacker()
   {
 	  if(toteIndicator.get() && isElevatorDown())
 	  {
@@ -54,7 +54,7 @@ public class Stacker {
 			  emptyStacker();
 		  }
 	  }
-	  elevator.update();
+	  elevator.processElevator();
   }
   /** 
    *  This method indicates if the Stacker is empty. Returns true if the stacker is empty, false otherwise.
