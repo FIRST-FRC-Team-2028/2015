@@ -1,18 +1,20 @@
 package com.phantommentalists.Twenty15;
 
 /*
+ * Author: Hunter Lawrence
  */
 public enum StackerState {
 
-  Empty,
+  Unknown,
 
   WaitingForTote,
 
-  LoweringTote,
+  LoweringElevator,
 
-  LiftingTote,
+  RaiseingElevator,
+  
+  TotePickedUp,
 
   Unloading;
 
-  
 }
