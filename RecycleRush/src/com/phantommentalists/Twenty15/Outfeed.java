@@ -25,6 +25,9 @@ public class Outfeed {
    *  This method moves the leadscrew left to push a stack left.
    */
   public void moveStackLeft() {
+        /**
+         * pusher.set(1.0)
+         */
   }
 
   /** 
