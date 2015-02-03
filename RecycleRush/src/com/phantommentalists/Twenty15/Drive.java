@@ -19,27 +19,23 @@ public class Drive {
 	private double strafe;
 
 	public Drive() {
-		if(Parameters.frontLeftCanId != 0)
-		{
+		if (Parameters.frontLeftCanId != 0) {
 			frontLeft = new CANTalon(Parameters.frontLeftCanId);
 			frontLeft.changeControlMode(ControlMode.Voltage);
 			frontLeft.enableControl();
 		}
-		if(Parameters.frontRightCanId != 0)
-		{
+		if (Parameters.frontRightCanId != 0) {
 			frontRight = new CANTalon(Parameters.frontRightCanId);
 			frontRight.changeControlMode(ControlMode.Voltage);
 			frontRight.reverseOutput(true);
 			frontRight.enableControl();
 		}
-		if(Parameters.rearLeftCanId != 0)
-		{
+		if (Parameters.rearLeftCanId != 0) {
 			rearLeft = new CANTalon(Parameters.rearLeftCanId);
 			rearLeft.changeControlMode(ControlMode.Voltage);
 			rearLeft.enableControl();
 		}
-		if(Parameters.rearRightCanId != 0)
-		{
+		if (Parameters.rearRightCanId != 0) {
 			rearRight = new CANTalon(Parameters.rearRightCanId);
 			rearRight.changeControlMode(ControlMode.Voltage);
 			rearRight.reverseOutput(true);
@@ -77,34 +73,50 @@ public class Drive {
 				rearRightOutput = y;
 			}
 		} else {
-			if(isDeadband(y))
-			{
+			if (isDeadband(y)) {
 				frontLeftOutput = x;
 				rearRightOutput = x;
 				frontRightOutput = x * -1;
 				rearLeftOutput = x * -1;
 			} else {
-//				if(x < 0)
-//				{
-//					frontLeftOutput = x - y;
-//					rearRightOutput = x - y;
-//					frontRightOutput = x;
-//					rearLeftOutput = x;
-//				}
-//				if(x > 0)
-//				{
-//					frontLeftOutput = x;
-//					rearRightOutput = x;
-//					frontRightOutput = x - y;
-//					rearLeftOutput = x - y;
-//				}
+				if (y > 0) {
+					if (x < 0) {
+						frontLeftOutput = x - y;
+						rearRightOutput = x - y;
+						frontRightOutput = x;
+						rearLeftOutput = x;
+					}
+					if (x > 0) {
+						frontLeftOutput = x;
+						rearRightOutput = x;
+						frontRightOutput = x - y;
+						rearLeftOutput = x - y;
+					}
+				} else {
+					if (x < 0) {
+						frontLeftOutput = x;
+						rearRightOutput = x;
+						frontRightOutput = x - y;
+						rearLeftOutput = x - y;
+					}
+					if (x > 0) {
+						frontLeftOutput = x - y;
+						rearRightOutput = x - y;
+						frontRightOutput = x;
+						rearLeftOutput = x;
+					}
+				}
 			}
 		}
 
-		if(frontLeft != null)frontLeft.set(frontLeftOutput * Parameters.maxMotorVoltage);
-		if(frontRight != null)frontRight.set(frontRightOutput * Parameters.maxMotorVoltage);
-		if(rearLeft != null)rearLeft.set(frontLeftOutput * Parameters.maxMotorVoltage);
-		if(rearRight != null)rearRight.set(frontLeftOutput * Parameters.maxMotorVoltage);
+		if (frontLeft != null)
+			frontLeft.set(frontLeftOutput * Parameters.maxMotorVoltage);
+		if (frontRight != null)
+			frontRight.set(frontRightOutput * Parameters.maxMotorVoltage);
+		if (rearLeft != null)
+			rearLeft.set(frontLeftOutput * Parameters.maxMotorVoltage);
+		if (rearRight != null)
+			rearRight.set(frontLeftOutput * Parameters.maxMotorVoltage);
 
 	}
 
