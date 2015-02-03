@@ -1,18 +1,14 @@
 package com.phantommentalists.Twenty15;
 
 public class Parameters {
-
-  public static final int frontDriveCanId = 0;
-
-  public static final int frontLeftSteeringCanId = 0;
+	
+  public static final int frontLeftCanId = 0;
 
   public static final int frontRightCanId = 0;
 
-  public static final int rearCanId = 0;
+  public static final int rearLeftCanId = 0;
 
-  public static final int rearLeftSteeringCanId = 0;
-
-  public static final int rearRightSteeringCanId = 0;
+  public static final int rearRightCanId = 0;
 
   public static final int steeringProportionalValue = 0;
 
