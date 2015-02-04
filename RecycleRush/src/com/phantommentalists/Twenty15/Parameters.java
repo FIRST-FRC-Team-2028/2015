@@ -2,14 +2,24 @@ package com.phantommentalists.Twenty15;
 
 public class Parameters {
 	
-  public static final int frontLeftCanId = 0;
+  public static final int frontLeftCanId = 11;
 
-  public static final int frontRightCanId = 0;
+  public static final int frontRightCanId = 12;
 
-  public static final int rearLeftCanId = 0;
+  public static final int rearLeftCanId = 13;
 
-  public static final int rearRightCanId = 0;
-
+  public static final int rearRightCanId = 14;
+  
+  public static final int stackerLeftCANId = 20;
+  
+  public static final int stackerRightCANId = 21;
+  
+  public static final int stackerConveyorCANId = 22;
+  
+  public static final int outfeedConveyorCANId = 30;
+  
+  public static final int outfeedArmCANId = 31;
+  
   public static final int steeringProportionalValue = 0;
 
   public static final int steeringIntegralValue = 0;
