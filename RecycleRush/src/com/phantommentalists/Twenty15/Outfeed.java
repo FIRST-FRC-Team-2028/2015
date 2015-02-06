@@ -19,8 +19,8 @@ public class Outfeed {
     	pusher=new CANTalon(Parameters.outfeedArmCANId);
     	roller=new CANTalon(Parameters.outfeedConveyorCANId);
     	
-    	pusher.changeControlMode(ControlMode.Voltage);
-    	roller.changeControlMode(ControlMode.Voltage);
+    	pusher.changeControlMode(ControlMode.PercentVbus);
+    	roller.changeControlMode(ControlMode.PercentVbus);
     	
     	pusher.enableLimitSwitch(true, true);
     	
