@@ -86,7 +86,6 @@ public class Drive {
 		frontRight.set(frontRightOutput * -1);
 		rearLeft.set(rearLeftOutput);
 		rearRight.set(rearRightOutput * -1);
-
 	}
 
 	/**
