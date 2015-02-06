@@ -24,8 +24,9 @@ public class Parameters {
   public static final int outfeedToteLimit = -1;
   public static final double outfeedConveyorVoltage = 12;
   public static final double outfeedPusherVoltage = 12;
-  
-  
+
+  //Stacker Values
+
   public static final int steeringProportionalValue = 0;
 
   public static final int steeringIntegralValue = 0;
