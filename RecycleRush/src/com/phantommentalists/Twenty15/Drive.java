@@ -23,24 +23,28 @@ public class Drive {
 		if (Parameters.frontLeftCanId != 0) {
 			frontLeft = new CANTalon(Parameters.frontLeftCanId);
 			frontLeft.changeControlMode(ControlMode.PercentVbus);
+			frontLeft.enableBrakeMode(true);
 			frontLeft.enableControl();
 			System.out.println("Front left initialized");
 		}
 		if (Parameters.frontRightCanId != 0) {
 			frontRight = new CANTalon(Parameters.frontRightCanId);
 			frontRight.changeControlMode(ControlMode.PercentVbus);
+			frontRight.enableBrakeMode(true);
 			frontRight.enableControl();
 			System.out.println("Front Right initialized");
 		}
 		if (Parameters.rearLeftCanId != 0) {
 			rearLeft = new CANTalon(Parameters.rearLeftCanId);
 			rearLeft.changeControlMode(ControlMode.PercentVbus);
+			rearLeft.enableBrakeMode(true);
 			rearLeft.enableControl();
 			System.out.println("Rear Left initialized");
 		}
 		if (Parameters.rearRightCanId != 0) {
 			rearRight = new CANTalon(Parameters.rearRightCanId);
 			rearRight.changeControlMode(ControlMode.PercentVbus);
+			rearRight.enableBrakeMode(true);
 			rearRight.enableControl();
 			System.out.println("Rear Righ Initialized");
 		}
