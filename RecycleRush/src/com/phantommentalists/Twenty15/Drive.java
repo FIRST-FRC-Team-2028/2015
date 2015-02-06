@@ -97,8 +97,8 @@ public class Drive {
 	}
 	
 	protected static double[] rotateVector(double x, double y, double angle) {
-        double cosA = Math.cos(angle * (3.14159 / 180.0));
-        double sinA = Math.sin(angle * (3.14159 / 180.0));
+        double cosA = Math.cos(angle * (Math.PI / 180.0));
+        double sinA = Math.sin(angle * (Math.PI / 180.0));
         double out[] = new double[2];
         out[0] = x * cosA - y * sinA;
         out[1] = x * sinA + y * cosA;
