@@ -32,5 +32,13 @@ public class Parameters {
 
   public static final double maxMotorVoltage = 12.0;
 
+  public static int infeedCANId = 40;
+
+  public static double infeedPower = 0.5;
+  
+  
+  
+  
+
   
 }
