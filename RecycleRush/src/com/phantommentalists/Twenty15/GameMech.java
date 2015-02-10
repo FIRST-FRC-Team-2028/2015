@@ -14,6 +14,7 @@ public class GameMech {
     private Infeed infeed;
     private Relay readyLight;
     private boolean fwd = true;
+    private boolean autonomous = false;
 
   public GameMech()
   {
@@ -64,12 +65,15 @@ public class GameMech {
 	  
   }
   
-  public void letOutFeedUseTheForce()
+  public void moveOutFeedArmLeft()
   {
-	  
+	  outfeed.moveStackLeft();
   }
   
-  
+  public void moveOutFeedArmRight()
+  {
+	  outfeed.moveStackRight();
+  }
 
   /** 
    *  This method handles the unloading of a finished stack.
@@ -77,7 +81,16 @@ public class GameMech {
   public void unload() {
   }
 
-  public void processGameMech() {
+  public void processGameMech(boolean auto) {
+	  if(auto)
+	  {
+		  autonomous = true;
+	  }
+	  else
+	  {
+		  autonomous = false;
+	  }
+	  
 	  stacker.processStacker();
   }
 
