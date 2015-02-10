@@ -18,6 +18,7 @@ public class PhantomOne extends SampleRobot {
     private PIDController driveController;
     private PIDController turnController;
     private Joystick driveStick;
+    private Joystick gmStick;
     private AnalogInput pot;
     private int t = 0;
     private boolean passedPlatform = false;
@@ -27,9 +28,11 @@ public class PhantomOne extends SampleRobot {
     public PhantomOne()
     {
     	 
-    	drive = new Drive();
+    	//drive = new Drive();
     	driveStick = new Joystick(0);
+    	gmStick = new Joystick(1);
     	pot = new AnalogInput(0);
+    	gameMech = new GameMech();
     }
     
   public void autonomous() {
@@ -69,16 +72,40 @@ public class PhantomOne extends SampleRobot {
   public void operatorControl() {
 	  while(isEnabled() && isOperatorControl())
 	  {
-		  System.out.println(pot.getAverageValue());
-		  if(driveStick.getTrigger()){
-			  drive.setTurn(driveStick.getTwist());
+//		  System.out.println(pot.getAverageValue());
+//		  if(driveStick.getTrigger()){
+//			  drive.setTurn(driveStick.getTwist());
+//		  }
+//		  else {
+//			  drive.setTurn(0);
+//		  }
+		  if(gmStick.getRawButton(10))
+		  {
+			  gameMech.turnStackerConveyorOn(true);
 		  }
-		  else {
-			  drive.setTurn(0);
+		  else if(gmStick.getRawButton(9))
+		  {
+			  gameMech.turnStackerConveyorOn(false);
 		  }
-		  drive.setDrive(driveStick.getY());
-		  drive.setStrafe(driveStick.getX());
-		  drive.processDrive();
+		  else
+		  {
+			  gameMech.turnStackerConveyorOff();
+		  }
+		  if(gmStick.getRawButton(4))
+		  {
+			  gameMech.raiseElevator();
+		  }
+		  else if(gmStick.getRawButton(3))
+		  {
+			  gameMech.lowerElevator();
+		  }
+		  else
+		  {
+			  gameMech.stopElevator();
+		  }
+//		  drive.setDrive(driveStick.getY());
+//		  drive.setStrafe(driveStick.getX());
+//		  drive.processDrive();
 		  Timer.delay(0.05);
 	  }
   }

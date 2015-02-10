@@ -8,17 +8,68 @@ public class GameMech {
 
   public boolean autoStacking;
 
-      private Stacker stacker;
+    private Stacker stacker;
     private GameMechState state;
     private Outfeed outfeed;
     private Infeed infeed;
     private Relay readyLight;
+    private boolean fwd = true;
 
+  public GameMech()
+  {
+	  stacker = new Stacker();
+	  outfeed = new Outfeed();
+	  infeed = new Infeed();
+  }
+  
+  public void raiseElevator()
+  {
+	  stacker.moveElevatorUp();
+  }
+  
+  public void lowerElevator()
+  {
+	  stacker.moveElevatorDown();
+  }
+  
+  public void stopElevator()
+  {
+	  stacker.stopElevator();
+  }
+  
+  public void turnStackerConveyorOn(boolean fwd)
+  {
+	  stacker.turnConveyorOn(fwd);
+  }
+  
+  public void turnStackerConveyorOff()
+  {
+	  stacker.turnConveyorOff();
+  }
+  
   /** 
    *  This method will deploy all parts of the game mechanism which need to be deployed.
    */
-  public void deployGameMech() {
+  public void deployInfeed() {
+	  infeed.deployInfeed();
   }
+  
+  public void turnOutFeedConveyorOn()
+  {
+	  outfeed.moveStackForward();
+  }
+  
+  public void turnOutFeedConveyorOff()
+  {
+	  
+  }
+  
+  public void letOutFeedUseTheForce()
+  {
+	  
+  }
+  
+  
 
   /** 
    *  This method handles the unloading of a finished stack.
@@ -27,6 +78,7 @@ public class GameMech {
   }
 
   public void processGameMech() {
+	  stacker.processStacker();
   }
 
   /** 

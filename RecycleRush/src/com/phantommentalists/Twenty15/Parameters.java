@@ -10,12 +10,6 @@ public class Parameters {
 
   public static final int rearRightCanId = 14;
   
-  public static final int stackerLeftCANId = 20;
-  
-  public static final int stackerRightCANId = 21;
-  
-  public static final int stackerConveyorCANId = 22;
-  
   /**
    * Outfeed Values
    */
@@ -26,6 +20,12 @@ public class Parameters {
   public static final double outfeedPusherVoltage = 12;
 
   //Stacker Values
+  public static final int stackerLeftCANId = 22;
+  public static final int stackerRightCANId = 23;
+  public static final int stackerConveyorCANId = 21;
+  public static final double stackerConveyorVoltage = 1.0;
+  public static final double stackerElevatorUpVoltage = 0.5;
+  public static final double stackerElevatorDownVoltage = -stackerElevatorUpVoltage;
 
   public static final int steeringProportionalValue = 0;
 
