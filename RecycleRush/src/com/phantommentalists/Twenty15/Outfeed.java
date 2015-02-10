@@ -12,7 +12,8 @@ public class Outfeed {
 	private CANTalon pusher;
 	private CANTalon roller;
 	private DigitalInput toteOut;
-
+	private boolean left = false;
+	
 	public Outfeed() {
 		toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
 
@@ -33,6 +34,10 @@ public class Outfeed {
 	 */
 	public void moveStackForward() {
 		roller.set(Parameters.outfeedConveyorVoltage);
+	}
+	
+	public void stopConveyor() {
+		roller.set(0.00000000000000000000);
 	}
 
 	/**
