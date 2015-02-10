@@ -68,5 +68,12 @@ public class Outfeed {
 	public boolean isStackInOutfeed() {
 		return toteOut.get();
 	}
-
+	
+	public boolean isPusherLeft() {
+		return pusher.isFwdLimitSwitchClosed();
+	}
+	
+	public boolean isPusherRight() {
+		return pusher.isRevLimitSwitchClosed();
+	}
 }

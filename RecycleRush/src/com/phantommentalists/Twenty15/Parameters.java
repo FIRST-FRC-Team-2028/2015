@@ -35,10 +35,5 @@ public class Parameters {
   public static int infeedCANId = 40;
 
   public static double infeedPower = 0.5;
-  
-  
-  
-  
 
-  
 }
