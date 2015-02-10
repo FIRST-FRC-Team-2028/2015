@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 
 /*
+ * Author: Christopher D. Hooks
  */
 public class Infeed {
 
@@ -11,13 +12,17 @@ public class Infeed {
 
       public Infeed()
       {
-    	  infeedDeploy = new CANTalon(0);
+    	  infeedDeploy = new CANTalon(Parameters.infeedCANId);
     	  infeedDeploy.changeControlMode(ControlMode.PercentVbus);
     	  infeedDeploy.enableControl();
       }
       
   public void deployInfeed() {
+	  infeedDeploy.set(Parameters.infeedPower);
 	  
+  }
+  public void retractInfeed() {
+	  infeedDeploy.set(-Parameters.infeedPower);
   }
 
 }

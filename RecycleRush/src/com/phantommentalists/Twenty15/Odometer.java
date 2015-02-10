@@ -1,11 +1,11 @@
 package com.phantommentalists.Twenty15;
 
-import java.util.Vector;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.PIDSource;
 
 public class Odometer implements PIDSource {
 
-      public Vector  myBuiltInAccelerometer;
+      public BuiltInAccelerometer  accel;
 
 	@Override
 	public double pidGet() {

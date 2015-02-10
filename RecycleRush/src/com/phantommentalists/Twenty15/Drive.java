@@ -2,7 +2,6 @@ package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
-import edu.wpi.first.wpilibj.RobotDrive;
 
 /*
  * CrabDrive allocation
@@ -18,6 +17,10 @@ public class Drive {
 	private double drive;
 	private double turn;
 	private double strafe;
+	private static double frontLeftOutput = 0;
+	private static double frontRightOutput = 0;
+	private static double rearLeftOutput = 0;
+	private static double rearRightOutput = 0;
 
 	public Drive() {
 		if (Parameters.frontLeftCanId != 0) {
@@ -71,10 +74,6 @@ public class Drive {
 		if(isDeadband(drive))drive = 0;
 		if(isDeadband(strafe))strafe = 0;
 		drive *= -1;
-		double frontLeftOutput = 0;
-		double frontRightOutput = 0;
-		double rearLeftOutput = 0;
-		double rearRightOutput = 0;
 		double rotated[] = rotateVector(strafe, drive, 0);
 		double xIn = rotated[0];
 		double yIn = rotated[1];
@@ -86,7 +85,6 @@ public class Drive {
 		frontRight.set(frontRightOutput * -1);
 		rearLeft.set(rearLeftOutput);
 		rearRight.set(rearRightOutput * -1);
-
 	}
 
 	/**
@@ -97,8 +95,8 @@ public class Drive {
 	}
 	
 	protected static double[] rotateVector(double x, double y, double angle) {
-        double cosA = Math.cos(angle * (3.14159 / 180.0));
-        double sinA = Math.sin(angle * (3.14159 / 180.0));
+        double cosA = Math.cos(angle * (Math.PI / 180.0));
+        double sinA = Math.sin(angle * (Math.PI / 180.0));
         double out[] = new double[2];
         out[0] = x * cosA - y * sinA;
         out[1] = x * sinA + y * cosA;

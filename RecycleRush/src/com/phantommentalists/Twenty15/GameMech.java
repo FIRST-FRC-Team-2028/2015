@@ -67,6 +67,7 @@ public class GameMech {
   
   public void moveOutFeedArmLeft()
   {
+	
 	  outfeed.moveStackLeft();
   }
   
