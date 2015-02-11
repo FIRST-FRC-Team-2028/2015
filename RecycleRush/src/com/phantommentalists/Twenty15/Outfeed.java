@@ -54,6 +54,16 @@ public class Outfeed {
 		pusher.set(Parameters.outfeedPusherVoltage);
 	}
 
+	public boolean isArmLeft()
+	{
+		return pusher.isRevLimitSwitchClosed();
+	}
+	
+	public boolean isArmRight()
+	{
+		return pusher.isFwdLimitSwitchClosed();
+	}
+	
 	/**
 	 * This method returns true if the stack has left the outfeed, false
 	 * otherwise.
