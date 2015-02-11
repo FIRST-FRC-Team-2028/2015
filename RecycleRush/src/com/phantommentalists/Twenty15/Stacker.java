@@ -15,6 +15,7 @@ public class Stacker {
     private DigitalInput toteIndicator;
     private int currentstackheight = 0;
     private int desiredstackheight = -1;
+    private boolean autonomous = false;
 
   public Stacker()
   {
@@ -104,7 +105,7 @@ public class Stacker {
    *  whether to light the red or green indicators.
    */
   public boolean isStackerReadyForTote() {
-	  if(state == StackerState.WaitingForTote)
+	  if(state == StackerState.WaitingForTote && isConveyorOn())
 	  {
 		  return true;
 	  }

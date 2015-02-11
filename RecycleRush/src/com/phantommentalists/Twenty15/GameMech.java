@@ -1,6 +1,6 @@
 package com.phantommentalists.Twenty15;
 
-import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /*
  */
@@ -10,9 +10,9 @@ public class GameMech {
 
     private Stacker stacker;
     private GameMechState state;
-    private Outfeed outfeed;
+    public Outfeed outfeed;
     private Infeed infeed;
-    private Relay readyLight;
+    private Solenoid readyLight;
     private boolean fwd = true;
     private boolean autonomous = false;
 
@@ -62,17 +62,18 @@ public class GameMech {
   
   public void turnOutFeedConveyorOff()
   {
-	  
+	  outfeed.stopConveyor();
   }
   
   public void moveOutFeedArmLeft()
   {
-	
+	  if(!outfeed.isPusherLeft())
 	  outfeed.moveStackLeft();
   }
   
   public void moveOutFeedArmRight()
   {
+	  if(!outfeed.isPusherRight())
 	  outfeed.moveStackRight();
   }
 
@@ -113,7 +114,7 @@ public class GameMech {
    *  whether to light the red or green indicators.
    */
   public boolean isGameMechReadyForTote() {
-  return false;
+  return stacker.isStackerReadyForTote();
   }
 
   /** 

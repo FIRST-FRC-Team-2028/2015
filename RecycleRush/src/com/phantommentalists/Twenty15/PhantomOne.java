@@ -91,6 +91,7 @@ public class PhantomOne extends SampleRobot {
 		  {
 			  gameMech.turnStackerConveyorOff();
 		  }
+		  //
 		  if(gmStick.getRawButton(4))
 		  {
 			  gameMech.raiseElevator();
@@ -103,6 +104,21 @@ public class PhantomOne extends SampleRobot {
 		  {
 			  gameMech.stopElevator();
 		  }
+		  //
+		  if(gmStick.getRawButton(8))
+		  {
+			  gameMech.turnOutFeedConveyorOn();
+		  }
+		  else if(gmStick.getRawButton(7))
+		  {
+			  //TODO:DONT DO THIS
+			  gameMech.outfeed.roller.set(-Parameters.outfeedConveyorVoltage);
+		  }
+		  else
+		  {
+			  gameMech.turnOutFeedConveyorOff();
+		  }
+		  
 //		  drive.setDrive(driveStick.getY());
 //		  drive.setStrafe(driveStick.getX());
 //		  drive.processDrive();

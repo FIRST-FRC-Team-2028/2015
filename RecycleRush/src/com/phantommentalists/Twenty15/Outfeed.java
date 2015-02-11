@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class Outfeed {
 
 	private CANTalon pusher;
-	private CANTalon roller;
+	public CANTalon roller;
 	private DigitalInput toteOut;
 	private boolean left = false;
 	
