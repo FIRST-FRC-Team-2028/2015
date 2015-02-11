@@ -20,6 +20,8 @@ public class Parameters {
   
   public static final int infeedCANId = 40;
   
+  public static final double infeedPower = 0.5;
+  
 //  Outfeed Values
    
   public static final int outfeedConveyorCANId = 31;
