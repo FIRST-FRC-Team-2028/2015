@@ -11,7 +11,7 @@ public class Infeed {
 
       public Infeed()
       {
-    	  infeedDeploy = new CANTalon(0);
+    	  infeedDeploy = new CANTalon(Parameters.infeedCANId);
     	  infeedDeploy.changeControlMode(ControlMode.PercentVbus);
     	  infeedDeploy.enableControl();
       }
