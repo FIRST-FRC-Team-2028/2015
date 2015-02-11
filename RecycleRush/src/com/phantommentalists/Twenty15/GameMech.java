@@ -55,9 +55,9 @@ public class GameMech {
 	  infeed.deployInfeed();
   }
   
-  public void turnOutFeedConveyorOn()
+  public void turnOutFeedConveyorOn(double power)
   {
-	  outfeed.moveStackForward();
+	  outfeed.roller.set(power);
   }
   
   public void turnOutFeedConveyorOff()

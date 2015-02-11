@@ -19,6 +19,7 @@ public class PhantomOne extends SampleRobot {
     private PIDController turnController;
     private Joystick driveStick;
     private Joystick gmStick;
+    private Joystick gmStick2;
     private AnalogInput pot;
     private int t = 0;
     private boolean passedPlatform = false;
@@ -31,6 +32,7 @@ public class PhantomOne extends SampleRobot {
     	//drive = new Drive();
     	driveStick = new Joystick(0);
     	gmStick = new Joystick(1);
+    	gmStick2 = new Joystick(3);
     	pot = new AnalogInput(0);
     	gameMech = new GameMech();
     }
@@ -107,7 +109,10 @@ public class PhantomOne extends SampleRobot {
 		  //
 		  if(gmStick.getRawButton(8))
 		  {
-			  gameMech.turnOutFeedConveyorOn();
+			  if(gmStick2.getX() >= 0 && gmStick2.getX() < 1)
+				  gameMech.turnOutFeedConveyorOn((gmStick2.getX()));
+			  else if(gmStick.getX() <= 0 && gmStick2.getX() > -1)
+				  gameMech.turnOutFeedConveyorOn(gmStick2.getX());
 		  }
 		  else if(gmStick.getRawButton(7))
 		  {
