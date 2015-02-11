@@ -22,10 +22,7 @@ public class PhantomOne extends SampleRobot {
     private Joystick launchPad;
     private Joystick driveStick;
     private AnalogInput tapeLeft;
-    private AnalogInput tapreRight;
-    private int t = 0;
-    private boolean passedPlatform = false;
-    private boolean driving = true;
+    private AnalogInput tapeRight;
     private boolean onPlatform = false;
     double angle;
 
