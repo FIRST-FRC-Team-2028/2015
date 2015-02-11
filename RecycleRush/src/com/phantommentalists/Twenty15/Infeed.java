@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj.CANTalon.ControlMode;
  */
 public class Infeed {
 
-      private CANTalon infeedDeploy;
+	private CANTalon infeedDeploy;
 
-      public Infeed()
-      {
-    	  infeedDeploy = new CANTalon(Parameters.infeedCANId);
-    	  infeedDeploy.changeControlMode(ControlMode.PercentVbus);
-    	  infeedDeploy.enableControl();
-      }
-      
-  public void deployInfeed() {
-	  infeedDeploy.set(Parameters.infeedPower);
-	  
-  }
-  public void retractInfeed() {
-	  infeedDeploy.set(-Parameters.infeedPower);
-  }
+	public Infeed() {
+		infeedDeploy = new CANTalon(Parameters.infeedCANId);
+		infeedDeploy.changeControlMode(ControlMode.PercentVbus);
+		infeedDeploy.enableControl();
+	}
+
+	public void deployInfeed() {
+		infeedDeploy.set(Parameters.infeedPower);
+
+	}
+
+	public void retractInfeed() {
+		infeedDeploy.set(-Parameters.infeedPower);
+	}
 
 }
