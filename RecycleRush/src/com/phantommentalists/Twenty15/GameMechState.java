@@ -8,7 +8,9 @@ public enum GameMechState {
 
   Stacking,
 
-  Retracted;
+  Retracted,
+  
+  Deployed;
 
   
 }
