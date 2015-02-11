@@ -14,7 +14,7 @@ public class Outfeed {
     private DigitalInput toteOut;
 
     public Outfeed(){
-    	toteOut = new DigitalInput(Parameters.outfeedToteLimit);
+    	toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
     	
     	pusher=new CANTalon(Parameters.outfeedArmCANId);
     	roller=new CANTalon(Parameters.outfeedConveyorCANId);

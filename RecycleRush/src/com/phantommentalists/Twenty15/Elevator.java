@@ -36,7 +36,7 @@ public class Elevator {
    */
   public void goUp() {
 	  leftMotor.set(1.0);
-	  rightMotor.set(1.0);
+	  rightMotor.set(-1.0);
   }
 
   /** 
@@ -44,7 +44,7 @@ public class Elevator {
    */
   public void goDown() {
 	  leftMotor.set(-1.0);
-	  rightMotor.set(-1.0);
+	  rightMotor.set(1.0);
   }
   /**
    *  This method stops the elevator side

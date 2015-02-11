@@ -8,12 +8,17 @@ public class GameMech {
 
   public boolean autoStacking;
 
-      private Stacker stacker;
+      public Stacker stacker;
     private GameMechState state;
     private Outfeed outfeed;
     private Infeed infeed;
     private Relay readyLight;
 
+    public GameMech()
+    {
+    	stacker = new Stacker();
+    }
+    
   /** 
    *  This method will deploy all parts of the game mechanism which need to be deployed.
    */

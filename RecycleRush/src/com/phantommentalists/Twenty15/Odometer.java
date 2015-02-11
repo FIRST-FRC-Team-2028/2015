@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 
 public class Odometer implements PIDSource {
 
-      public BuiltInAccelerometer  accel;
+      public BuiltInAccelerometer  myBuiltInAccelerometer;
 
 	@Override
 	public double pidGet() {
