@@ -53,6 +53,11 @@ public class Outfeed {
 	public void moveStackRight() {
 		pusher.set(Parameters.outfeedPusherVoltage);
 	}
+	
+	public void stopPusher()
+	{
+		pusher.set(0.0);
+	}
 
 	/**
 	 * This method returns true if the stack has left the outfeed, false

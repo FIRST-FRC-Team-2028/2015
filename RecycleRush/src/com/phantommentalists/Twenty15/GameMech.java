@@ -38,9 +38,9 @@ public class GameMech {
 	  stacker.stopElevator();
   }
   
-  public void turnStackerConveyorOn(boolean fwd)
+  public void turnStackerConveyorOn(boolean fwd,double speed)
   {
-	  stacker.turnConveyorOn(fwd);
+	  stacker.turnConveyorOn(fwd,speed);
   }
   
   public void turnStackerConveyorOff()
@@ -53,6 +53,16 @@ public class GameMech {
    */
   public void deployInfeed() {
 	  infeed.deployInfeed();
+  }
+  
+  public void retractInfeed()
+  {
+	  infeed.retractInfeed();
+  }
+  
+  public void stopInfeed()
+  {
+	  infeed.stopInfeed();
   }
   
   public void turnOutFeedConveyorOn(double power)
@@ -75,6 +85,11 @@ public class GameMech {
   {
 	  if(!outfeed.isPusherRight())
 	  outfeed.moveStackRight();
+  }
+  
+  public void stopOutFeedArm()
+  {
+	  outfeed.stopPusher();
   }
 
   /** 

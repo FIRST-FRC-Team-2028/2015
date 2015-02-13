@@ -83,11 +83,11 @@ public class PhantomOne extends SampleRobot {
 //		  }
 		  if(gmStick.getRawButton(10))
 		  {
-			  gameMech.turnStackerConveyorOn(true);
+			  gameMech.turnStackerConveyorOn(true,gmStick2.getY());
 		  }
 		  else if(gmStick.getRawButton(9))
 		  {
-			  gameMech.turnStackerConveyorOn(false);
+			  gameMech.turnStackerConveyorOn(false,gmStick2.getY());
 		  }
 		  else
 		  {
@@ -124,10 +124,35 @@ public class PhantomOne extends SampleRobot {
 			  gameMech.turnOutFeedConveyorOff();
 		  }
 		  
+		  if(gmStick.getRawButton(6))
+		  {
+			  gameMech.deployInfeed();
+		  }
+		  else if(gmStick.getRawButton(5))
+		  {
+			  gameMech.retractInfeed();
+		  }
+		  else
+		  {
+			  gameMech.stopInfeed();
+		  }
+		  
+		  if(gmStick.getRawButton(1))
+		  {
+			  gameMech.moveOutFeedArmLeft();
+		  }
+		  else if(gmStick.getRawButton(2))
+		  {
+			  gameMech.moveOutFeedArmRight();
+		  }
+		  else
+		  {
+			  gameMech.stopOutFeedArm();
+		  }
 //		  drive.setDrive(driveStick.getY());
 //		  drive.setStrafe(driveStick.getX());
 //		  drive.processDrive();
-		  Timer.delay(0.05);
+		  Timer.delay(0.1);
 	  }
   }
 

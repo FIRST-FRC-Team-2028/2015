@@ -24,5 +24,10 @@ public class Infeed {
   public void retractInfeed() {
 	  infeedDeploy.set(-Parameters.infeedPower);
   }
+  
+  public void stopInfeed()
+  {
+	  infeedDeploy.set(0.0);
+  }
 
 }

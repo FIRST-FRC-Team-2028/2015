@@ -136,10 +136,10 @@ public class Stacker {
 	  elevator.stop();
   }
   
-  public void turnConveyorOn(boolean fwd)
+  public void turnConveyorOn(boolean fwd,double speed)
   {
 	  if(fwd)
-		  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+		  conveyorMotor.set(speed);
 	  else
 		  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
   }
