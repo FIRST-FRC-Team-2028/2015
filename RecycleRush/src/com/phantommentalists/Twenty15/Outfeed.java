@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class Outfeed {
 
 	private CANTalon pusher;
-	public CANTalon roller;
+	private CANTalon roller;
 	private DigitalInput toteOut;
 	private boolean left = false;
 	
@@ -32,8 +32,8 @@ public class Outfeed {
 	/**
 	 * This method will move a stack forward in the outfeed.
 	 */
-	public void moveStackForward() {
-		roller.set(Parameters.outfeedConveyorVoltage);
+	public void moveStackForward(double power) {
+		roller.set(power);
 	}
 	
 	public void stopConveyor() {
@@ -44,6 +44,7 @@ public class Outfeed {
 	 * This method moves the leadscrew left to push a stack left.
 	 */
 	public void moveStackLeft() {
+		if(!isPusherLeft())
 		pusher.set(-Parameters.outfeedPusherVoltage);
 	}
 
@@ -51,6 +52,7 @@ public class Outfeed {
 	 * This method moves the leadscrew right to push a stack right.
 	 */
 	public void moveStackRight() {
+		if(!isPusherRight())
 		pusher.set(Parameters.outfeedPusherVoltage);
 	}
 	
