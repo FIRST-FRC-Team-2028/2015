@@ -3,6 +3,7 @@ package com.phantommentalists.Twenty15;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * Author: Christopher D. Hooks
@@ -15,20 +16,26 @@ public class Outfeed {
 	private boolean left = false;
 	
 	public Outfeed() {
-		//toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
+		toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
 
 		pusher = new CANTalon(Parameters.outfeedArmCANId);
 		roller = new CANTalon(Parameters.outfeedConveyorCANId);
 
 		pusher.changeControlMode(ControlMode.PercentVbus);
 		roller.changeControlMode(ControlMode.PercentVbus);
+		
+		pusher.enableBrakeMode(true);
 
 		pusher.enableLimitSwitch(true, true);
+		
 		pusher.enableControl();
 		roller.enableControl();
 		
 	}
-
+	public void processOutfeed()
+	{
+		SmartDashboard.putBoolean("Outfeed tote indicator", toteOut.get());
+	}
 	/**
 	 * This method will move a stack forward in the outfeed.
 	 */
@@ -77,10 +84,10 @@ public class Outfeed {
 	}
 	
 	public boolean isPusherLeft() {
-		return pusher.isFwdLimitSwitchClosed();
+		return pusher.isRevLimitSwitchClosed();
 	}
 	
 	public boolean isPusherRight() {
-		return pusher.isRevLimitSwitchClosed();
+		return pusher.isFwdLimitSwitchClosed();
 	}
 }

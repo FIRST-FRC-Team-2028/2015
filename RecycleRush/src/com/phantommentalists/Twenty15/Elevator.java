@@ -2,6 +2,7 @@ package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * Author: Hunter Lawrence
@@ -17,6 +18,9 @@ public class Elevator {
 	  
 	  leftMotor.changeControlMode(ControlMode.PercentVbus);
 	  rightMotor.changeControlMode(ControlMode.PercentVbus);
+	  
+	  leftMotor.enableBrakeMode(true);
+	  rightMotor.enableBrakeMode(true);
 	  
 	  leftMotor.enableLimitSwitch(true, true);
 	  rightMotor.enableLimitSwitch(true, true);
@@ -81,7 +85,7 @@ public class Elevator {
    */
   public boolean isUp() {
 	  //TODO: Just thrown in there fwd/rev limit switches not known
-	  if(leftMotor.isFwdLimitSwitchClosed() && rightMotor.isFwdLimitSwitchClosed())
+	  if(leftMotor.isRevLimitSwitchClosed() && rightMotor.isFwdLimitSwitchClosed())
 		  return true;
 	  else
 		  return false;
@@ -92,7 +96,7 @@ public class Elevator {
    */
   public boolean isDown() {
 	  //TODO: Same as the TODO in isUp()
-	  if(leftMotor.isRevLimitSwitchClosed() && rightMotor.isRevLimitSwitchClosed())
+	  if(leftMotor.isFwdLimitSwitchClosed() && rightMotor.isRevLimitSwitchClosed())
 		  return true;
 	  else
 		  return false;

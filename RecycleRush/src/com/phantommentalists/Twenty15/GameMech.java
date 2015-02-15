@@ -40,7 +40,14 @@ public class GameMech {
   
   public void turnStackerConveyorOn(boolean fwd,double speed)
   {
-	  stacker.turnConveyorOn(fwd,speed);
+	  if (fwd)
+	  {
+		  stacker.turnConveyorOn(speed);
+	  }
+	  else 
+	  {
+		  stacker.turnConveyorOn(-speed);
+	  }
   }
   
   public void turnStackerConveyorOff()
@@ -77,13 +84,11 @@ public class GameMech {
   
   public void moveOutFeedArmLeft()
   {
-	  if(!outfeed.isPusherLeft())
 	  outfeed.moveStackLeft();
   }
   
   public void moveOutFeedArmRight()
   {
-	  if(!outfeed.isPusherRight())
 	  outfeed.moveStackRight();
   }
   
@@ -99,16 +104,17 @@ public class GameMech {
   }
 
   public void processGameMech(boolean auto) {
-	  if(auto)
-	  {
-		  autonomous = true;
-	  }
-	  else
-	  {
-		  autonomous = false;
-	  }
+//	  if(auto)
+//	  {
+//		  autonomous = true;
+//	  }
+//	  else
+//	  {
+//		  autonomous = false;
+//	  }
 	  
 	  stacker.processStacker();
+	  outfeed.processOutfeed();
   }
 
   /** 
