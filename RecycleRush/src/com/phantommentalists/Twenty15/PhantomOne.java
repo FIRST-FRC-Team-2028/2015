@@ -30,13 +30,12 @@ public class PhantomOne extends SampleRobot {
 	private boolean driving = true;
 	private boolean onPlatform = false;
 	private AutoStates autostate;
-	private SmartDashboard smb;
 	private Timer timer;
 	private DigitalInput outfeedinput; //3.14159265358979323846264338327950
+	private boolean autopilot = false;
 
 	public PhantomOne() {
 
-		smb = new SmartDashboard();
 		drive = new Drive();
 		gyro = new Gyro(Parameters.gyroAnalogIn);
 		turnPIDOut = new TurnPIDOut(drive);
@@ -61,6 +60,7 @@ public class PhantomOne extends SampleRobot {
 		while (isAutonomous() && isEnabled()) {
 			SmartDashboard.putNumber("Match Time", timer.get());
 			SmartDashboard.putString("Autostate ", autostate.toString());
+			turnController.disable();
 			switch(autostate)
 			{
 			case lifttote:
@@ -83,9 +83,9 @@ public class PhantomOne extends SampleRobot {
 				if(startTime == 0.0)
 				{
 					startTime = timer.get();
-//					turnController.enable();
-					drive.setStrafe(0.5);
-					drive.setDrive(0.0);
+					System.err.println(timer.get());
+					turnController.enable();
+					System.out.println("set drive");
 				}
 				else if(tapeleft.getAverageValue() < 450 && taperight.getAverageValue() < 450)
 				{
@@ -98,6 +98,11 @@ public class PhantomOne extends SampleRobot {
 //					drive.setDrive(0.0);
 //					turnController.disable();
 				}
+				else
+				{
+					drive.setDrive(-0.5);
+				}
+//				drive.processDrive();
 				break;
 			case scoring:
 				if(startTime == 0.0)
@@ -115,6 +120,9 @@ public class PhantomOne extends SampleRobot {
 					drive.setDrive(0.0);
 					turnController.disable();
 				}
+				else {
+					drive.setDrive(-0.35);
+				}
 				break;
 			case autozone:
 				if(startTime == 0.0)
@@ -130,6 +138,7 @@ public class PhantomOne extends SampleRobot {
 				break;
 			case done:
 				timer.stop();
+				drive.setDrive(0.0);
 				break;
 			default:
 				break;
@@ -147,7 +156,7 @@ public class PhantomOne extends SampleRobot {
 			SmartDashboard.putNumber("Joystick x:",driveStick.getX());
 			SmartDashboard.putNumber("JoyStick y:", driveStick.getY());
 //			SmartDashboard.putBoolean("StackerTote Inicator", );
-			// System.out.println(pot.getAverageValue());
+			 System.out.println("printing");
 			if (drive != null) {
 				if(driveStick.getRawButton(11))
 				{
@@ -178,6 +187,14 @@ public class PhantomOne extends SampleRobot {
 			}
 			
 			if (gameMech != null) {
+				if(gmStick.getX() == -1.0)
+				{
+					gameMech.setAutonomousStacking(true);
+				}
+				else
+				{
+					gameMech.setAutonomousStacking(false);
+				}
 				if (gmStick.getRawButton(10)) {
 					gameMech.turnStackerConveyorOn(true,gmStick2.getY());
 				} else if (gmStick.getRawButton(9)) {
@@ -221,7 +238,8 @@ public class PhantomOne extends SampleRobot {
 				} else {
 					gameMech.stopOutFeedArm();
 				}
-				gameMech.processGameMech(false);
+				gameMech.processGameMech();
+				
 			}
 			Timer.delay(0.1);
 		}

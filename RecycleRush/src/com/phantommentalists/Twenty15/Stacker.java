@@ -16,11 +16,11 @@ public class Stacker {
     private DigitalInput toteIndicator;
     private int currentstackheight = 0;
     private int desiredstackheight = -1;
-    private boolean auto = false;
+    private boolean autopilot = false;
 
   public Stacker()
   {
-//	  state = StackerState.Unknown;
+	  state = StackerState.Unknown;
 	  toteIndicator = new DigitalInput(2);
 	  elevator = new Elevator(Parameters.stackerLeftCANId,Parameters.stackerRightCANId);
 	  conveyorMotor = new CANTalon(Parameters.stackerConveyorCANId);
@@ -30,36 +30,44 @@ public class Stacker {
   public void processStacker()
   {
 	  SmartDashboard.putBoolean("Stacker tote indicator", toteIndicator.get());
-
-//	  if(toteIndicator.get() && isElevatorDown())
-//	  {
-//		  currentstackheight++;
-//	  }
-//	  if(state == StackerState.Unknown)
-//	  {
-//		  moveElevatorUp();
-//	  }
-//	  if(isElevatorUp() && state == StackerState.RaiseingElevator)
-//	  {
-//		  state = StackerState.WaitingForTote;
-//	  }
-//	  if(state == StackerState.LoweringElevator && isElevatorDown())
-//	  {
-//		  state = StackerState.TotePickedUp;
-//	  }
-//	  if(state == StackerState.Unloading)
-//	  {
-//		  if(isConveyorOn() && !toteIndicator.get())
-//		  {
-//			  moveElevatorUp();
-//			  currentstackheight = 0;
-//		  }
-//		  else if(!isConveyorOn())
-//		  {
-//			  emptyStacker();
-//		  }
-//	  }
+	  SmartDashboard.putNumber("Stack count", currentstackheight);
+	  if(!toteIndicator.get() && isElevatorDown())
+	  {
+		  currentstackheight++;
+	  }
+	  if(autopilot)
+	  {
+		  if(state == StackerState.Unknown)
+		  {
+			  moveElevatorUp();
+		  }
+		  if(isElevatorUp() && state == StackerState.RaiseingElevator)
+		  {
+			  state = StackerState.WaitingForTote;
+		  }
+		  if(state == StackerState.LoweringElevator && isElevatorDown())
+		  {
+			  state = StackerState.TotePickedUp;
+		  }
+		  if(state == StackerState.Unloading)
+		  {
+			  if(isConveyorOn() && toteIndicator.get())
+			  {
+				  moveElevatorUp();
+				  currentstackheight = 0;
+			  }
+			  else if(!isConveyorOn())
+			  {
+				  emptyStacker();
+			  }
+		  }
+	  }
 	  elevator.processElevator();
+  }
+  
+  public void setStackToZero()
+  {
+	  currentstackheight = 0;
   }
   /** 
    *  This method indicates if the Stacker is empty. Returns true if the stacker is empty, false otherwise.
@@ -146,7 +154,7 @@ public class Stacker {
 	  {
 		  conveyorMotor.set(speed);
 	  }
-	  else if(elevator.isDown() && !toteIndicator.get())
+	  else if(elevator.isDown())
 	  {
 		  conveyorMotor.set(speed);
 	  }

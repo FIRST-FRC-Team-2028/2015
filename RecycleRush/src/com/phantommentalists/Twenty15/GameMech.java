@@ -14,7 +14,7 @@ public class GameMech {
     private Infeed infeed;
     private Solenoid readyLight;
     private boolean fwd = true;
-    private boolean autonomous = false;
+    private boolean autopilot = false;
 
   public GameMech()
   {
@@ -103,20 +103,33 @@ public class GameMech {
   public void unload() {
   }
 
-  public void processGameMech(boolean auto) {
-//	  if(auto)
-//	  {
-//		  autonomous = true;
-//	  }
-//	  else
-//	  {
-//		  autonomous = false;
-//	  }
+  public void processGameMech() {
+	  if(autopilot)
+	  {
+		  
+	  }
+	  else
+	  {
+	  }
 	  
 	  stacker.processStacker();
 	  outfeed.processOutfeed();
+	  infeed.processInfeed();
   }
-
+  
+  public void initAutoPilot()
+  {
+	  infeed.deployInfeed();
+	  stacker.moveElevatorUp();
+  }
+ 
+  public void setStackZero()
+  {
+	  if(outfeed.isConveying())
+	  {
+		  stacker.setStackToZero();
+	  }
+  }
   /** 
    *  This method returns true if the game mechanisms are empty, false otherwise.
    */
@@ -149,6 +162,11 @@ public class GameMech {
    *  This method tells the game mech whether or not to create stacks autonomously.
    */
   public void setAutonomousStacking(boolean auto) {
+	  autopilot = auto;
+	  if(auto)
+	  {
+		  initAutoPilot();
+	  }
   }
 
 }

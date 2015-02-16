@@ -20,6 +20,8 @@ public class Outfeed {
 	private TimerTask timertask;
 	private Timer timer;
 	private boolean timerdone = false;
+	private boolean autopilot = false;
+	private OutfeedStates state;
 	
 	private class delay extends TimerTask
 	{
@@ -30,6 +32,7 @@ public class Outfeed {
 	}
 	
 	public Outfeed() {
+		state = OutfeedStates.nothing;
 		toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
 
 		pusher = new CANTalon(Parameters.outfeedArmCANId);
@@ -50,6 +53,19 @@ public class Outfeed {
 	{
 		SmartDashboard.putBoolean("Outfeed tote indicator", toteOut.get());
 		SmartDashboard.putNumber("Outfeed current",pusher.getOutputCurrent());
+		
+		if(!pusher.isFwdLimitSwitchClosed() || !pusher.isRevLimitSwitchClosed())
+		{
+			state = OutfeedStates.movingarm;
+		}
+		else if(roller.getOutputVoltage() > 0 || !toteOut.get())
+		{
+			state = OutfeedStates.conveying;
+		}
+		else
+		{
+			state = OutfeedStates.nothing;
+		}
 	}
 	/**
 	 * This method will move a stack forward in the outfeed.
@@ -119,5 +135,20 @@ public class Outfeed {
 	
 	public boolean isPusherRight() {
 		return pusher.isFwdLimitSwitchClosed();
+	}
+	
+	public boolean isConveying()
+	{
+		return (state == OutfeedStates.conveying);
+	}
+	
+	public boolean isMovingArm()
+	{
+		return (state == OutfeedStates.movingarm);
+	}
+	
+	public boolean isNothing()
+	{
+		return (state == OutfeedStates.nothing);
 	}
 }

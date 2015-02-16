@@ -42,7 +42,7 @@ public class Parameters {
   public static final int tapeLeftAnalogIn = 3;
   public static final int taperightAnalogIn = 2;
   
-  public static final double autoLiftTime = 1.0;
+  public static final double autoLiftTime = 0.6;
   public static final double autoDrivePower = 0.5;
   public static final double autoFailsafeCarpetTime = 7.5;
   public static final double autoFailsafeScoringTime = 5.0;
