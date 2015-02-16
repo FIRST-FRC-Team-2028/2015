@@ -30,10 +30,15 @@ public class Elevator {
   }
   public void processElevator()
   {
-	  if(isUp() || isDown())
-	  {
-		  stop();
-	  } 
+	  SmartDashboard.putBoolean("Stacker up left limit", leftMotor.isRevLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker up right limit", rightMotor.isFwdLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker down left limit", leftMotor.isFwdLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker down right limit", rightMotor.isRevLimitSwitchClosed());
+
+//	  if(isUp() || isDown())
+//	  {
+//		  stop();
+//	  } 
   }
   /** 
    *  This method moves the elevator side to the up position.

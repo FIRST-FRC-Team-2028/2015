@@ -1,5 +1,8 @@
 package com.phantommentalists.Twenty15;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -14,6 +17,17 @@ public class Outfeed {
 	private CANTalon roller;
 	private DigitalInput toteOut;
 	private boolean left = false;
+	private TimerTask timertask;
+	private Timer timer;
+	private boolean timerdone = false;
+	
+	private class delay extends TimerTask
+	{
+		public void run() {
+			timerdone = true;
+		}
+		
+	}
 	
 	public Outfeed() {
 		toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
@@ -35,12 +49,28 @@ public class Outfeed {
 	public void processOutfeed()
 	{
 		SmartDashboard.putBoolean("Outfeed tote indicator", toteOut.get());
+		SmartDashboard.putNumber("Outfeed current",pusher.getOutputCurrent());
 	}
 	/**
 	 * This method will move a stack forward in the outfeed.
 	 */
 	public void moveStackForward(double power) {
-		roller.set(power);
+		if(toteOut.get())
+		{
+			timerdone = false;
+			roller.set(Parameters.outfeedConveyorVoltageSlow);
+		}
+		else if(!toteOut.get() && !timerdone)
+		{
+			roller.set(0.0);
+			timertask = new delay();
+			timer = new Timer();
+			timer.schedule(timertask, 250);
+		}
+		else if(timerdone && !toteOut.get())
+		{
+			roller.set(Parameters.outfeedConveyorVoltageFast);
+		}
 	}
 	
 	public void stopConveyor() {

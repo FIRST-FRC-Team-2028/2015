@@ -15,14 +15,15 @@ public class Parameters {
   public static final int outfeedConveyorCANId = 31;
   public static final int outfeedArmCANId = 30;
   public static final int outfeedToteLimitSwitch = 0;
-  public static final double outfeedConveyorVoltage = 1.0;
+  public static final double outfeedConveyorVoltageSlow = 0.35;
+  public static final double outfeedConveyorVoltageFast = 1.0;
   public static final double outfeedPusherVoltage = 1.0;
   
   public static final int stackerLeftCANId = 22;
   public static final int stackerRightCANId = 23;
   public static final int stackerConveyorCANId = 21;
   public static final double stackerConveyorVoltage = 1.0;
-  public static final double stackerElevatorUpVoltage = 0.5;
+  public static final double stackerElevatorUpVoltage = 1.0;
   public static final double stackerElevatorDownVoltage = -stackerElevatorUpVoltage;
 
   public static final double steeringProportionalValue = 0.05;
@@ -38,10 +39,10 @@ public class Parameters {
   public static final double infeedPower = 1.0;
   
   public static final int gyroAnalogIn = 0;
-  public static final int tapeLeftAnalogIn = 1;
+  public static final int tapeLeftAnalogIn = 3;
   public static final int taperightAnalogIn = 2;
   
-  public static final double autoLiftTime = 0.333;
+  public static final double autoLiftTime = 1.0;
   public static final double autoDrivePower = 0.5;
   public static final double autoFailsafeCarpetTime = 7.5;
   public static final double autoFailsafeScoringTime = 5.0;

@@ -16,12 +16,12 @@ public class Stacker {
     private DigitalInput toteIndicator;
     private int currentstackheight = 0;
     private int desiredstackheight = -1;
-    private boolean autonomous = false;
+    private boolean auto = false;
 
   public Stacker()
   {
 //	  state = StackerState.Unknown;
-	  toteIndicator = new DigitalInput(1);
+	  toteIndicator = new DigitalInput(2);
 	  elevator = new Elevator(Parameters.stackerLeftCANId,Parameters.stackerRightCANId);
 	  conveyorMotor = new CANTalon(Parameters.stackerConveyorCANId);
 	  conveyorMotor.changeControlMode(ControlMode.PercentVbus);
@@ -59,7 +59,7 @@ public class Stacker {
 //			  emptyStacker();
 //		  }
 //	  }
-//	  elevator.processElevator();
+	  elevator.processElevator();
   }
   /** 
    *  This method indicates if the Stacker is empty. Returns true if the stacker is empty, false otherwise.
@@ -146,7 +146,7 @@ public class Stacker {
 	  {
 		  conveyorMotor.set(speed);
 	  }
-	  else if(elevator.isDown() && toteIndicator.get())
+	  else if(elevator.isDown() && !toteIndicator.get())
 	  {
 		  conveyorMotor.set(speed);
 	  }
