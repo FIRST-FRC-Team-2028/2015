@@ -26,12 +26,12 @@ public class PhantomOne extends SampleRobot {
 	private Joystick gmStick;
 	private Joystick gmStick2;
 	private int t = 0;
-	private boolean passedPlatform = false; //3.14159265358979323846264338327950
+	private boolean passedPlatform = false; // 3.14159265358979323846264338327950
 	private boolean driving = true;
 	private boolean onPlatform = false;
 	private AutoStates autostate;
 	private Timer timer;
-	private DigitalInput outfeedinput; //3.14159265358979323846264338327950
+	private DigitalInput outfeedinput; // 3.14159265358979323846264338327950
 	private boolean autopilot = false;
 
 	public PhantomOne() {
@@ -39,19 +39,21 @@ public class PhantomOne extends SampleRobot {
 		drive = new Drive();
 		gyro = new Gyro(Parameters.gyroAnalogIn);
 		turnPIDOut = new TurnPIDOut(drive);
-		turnController = new PIDController(Parameters.steeringProportionalValue,
-				Parameters.steeringIntegralValue,Parameters.steeringDerivativeValue,
-				gyro,turnPIDOut);
-		driveStick = new Joystick(0); //3.14159265358979323846267338327950
+		turnController = new PIDController(
+				Parameters.steeringProportionalValue,
+				Parameters.steeringIntegralValue,
+				Parameters.steeringDerivativeValue, gyro, turnPIDOut);
+		driveStick = new Joystick(0); // 3.14159265358979323846267338327950
 		gmStick = new Joystick(1);
 		gmStick2 = new Joystick(3);
-		gameMech = new GameMech(); //3.14159265358979323846264338327950
+		gameMech = new GameMech(); // 3.14159265358979323846264338327950
 		tapeleft = new AnalogInput(Parameters.tapeLeftAnalogIn);
 		taperight = new AnalogInput(Parameters.taperightAnalogIn);
 		timer = new Timer();
 	}
+
 	public void autonomous() {
-		double startTime=0.0;
+		double startTime = 0.0;
 		onPlatform = false;
 		autostate = AutoStates.lifttote;
 		gyro.reset();
@@ -61,18 +63,13 @@ public class PhantomOne extends SampleRobot {
 			SmartDashboard.putNumber("Match Time", timer.get());
 			SmartDashboard.putString("Autostate ", autostate.toString());
 			turnController.disable();
-			switch(autostate)
-			{
+			switch (autostate) {
 			case lifttote:
-				if(startTime == 0.0)
-				{
+				if (startTime == 0.0) {
 					startTime = timer.get();
 					gameMech.raiseElevator();
-				}
-				else
-				{
-					if(timer.get()-startTime >= Parameters.autoLiftTime)
-					{
+				} else {
+					if (timer.get() - startTime >= Parameters.autoLiftTime) {
 						gameMech.stopElevator();
 						autostate = AutoStates.carpet;
 						startTime = 0.0;
@@ -80,57 +77,43 @@ public class PhantomOne extends SampleRobot {
 				}
 				break;
 			case carpet:
-				if(startTime == 0.0)
-				{
+				if (startTime == 0.0) {
 					startTime = timer.get();
 					System.err.println(timer.get());
 					turnController.enable();
 					System.out.println("set drive");
-				}
-				else if(tapeleft.getAverageValue() < 450 && taperight.getAverageValue() < 450)
-				{
+				} else if (tapeleft.getAverageValue() < 450
+						&& taperight.getAverageValue() < 450) {
 					autostate = AutoStates.scoring;
 					startTime = 0.0;
-				}
-				else if(timer.get()-startTime > Parameters.autoFailsafeCarpetTime)
-				{
-					//Fail Safe Should never get here
-//					drive.setDrive(0.0);
-//					turnController.disable();
-				}
-				else
-				{
+				} else if (timer.get() - startTime > Parameters.autoFailsafeCarpetTime) {
+					// Fail Safe Should never get here
+					// drive.setDrive(0.0);
+					// turnController.disable();
+				} else {
 					drive.setDrive(-0.5);
 				}
-//				drive.processDrive();
+				// drive.processDrive();
 				break;
 			case scoring:
-				if(startTime == 0.0)
-				{
+				if (startTime == 0.0) {
 					startTime = timer.get();
-				}
-				else if(tapeleft.getAverageValue() > Parameters.autoTapeThreshHold && taperight.getAverageValue() > Parameters.autoTapeThreshHold)
-				{
+				} else if (tapeleft.getAverageValue() > Parameters.autoTapeThreshHold
+						&& taperight.getAverageValue() > Parameters.autoTapeThreshHold) {
 					startTime = 0.0;
 					autostate = AutoStates.autozone;
-				}
-				else if(timer.get()-startTime > Parameters.autoFailsafeScoringTime)
-				{
-					//Fail Safe Should never get here
+				} else if (timer.get() - startTime > Parameters.autoFailsafeScoringTime) {
+					// Fail Safe Should never get here
 					drive.setDrive(0.0);
 					turnController.disable();
-				}
-				else {
+				} else {
 					drive.setDrive(-0.35);
 				}
 				break;
 			case autozone:
-				if(startTime == 0.0)
-				{
+				if (startTime == 0.0) {
 					startTime = timer.get();
-				}
-				else if(timer.get()-startTime >= Parameters.autoScoreTime)
-				{
+				} else if (timer.get() - startTime >= Parameters.autoScoreTime) {
 					drive.setDrive(0.0);
 					turnController.disable();
 					autostate = AutoStates.done;
@@ -151,33 +134,30 @@ public class PhantomOne extends SampleRobot {
 	public void operatorControl() {
 		while (isEnabled() && isOperatorControl()) {
 			SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
-			SmartDashboard.putNumber("Left Tape Sensor", tapeleft.getAverageValue());
-			SmartDashboard.putNumber("Right Tape Sensor",taperight.getAverageValue());
-			SmartDashboard.putNumber("Joystick x:",driveStick.getX());
+			SmartDashboard.putNumber("Left Tape Sensor",
+					tapeleft.getAverageValue());
+			SmartDashboard.putNumber("Right Tape Sensor",
+					taperight.getAverageValue());
+			SmartDashboard.putNumber("Joystick x:", driveStick.getX());
 			SmartDashboard.putNumber("JoyStick y:", driveStick.getY());
-//			SmartDashboard.putBoolean("StackerTote Inicator", );
-			 System.out.println("printing");
+			// SmartDashboard.putBoolean("StackerTote Inicator", );
+			System.out.println("printing");
 			if (drive != null) {
-				if(driveStick.getRawButton(11))
-				{
+				if (driveStick.getRawButton(11)) {
 					gyro.reset();
 				}
-				if(driveStick.getRawButton(7))
-				{
-					if(!turnController.isEnable() /* FIX ME - use game mech autonomous */)
-					{
-						turnController.enable();	
+				if (driveStick.getRawButton(7)) {
+					if (!turnController.isEnable() /*
+													 * FIX ME - use game mech
+													 * autonomous
+													 */) {
+						turnController.enable();
 					}
-				}
-				else 
-				{
+				} else {
 					turnController.disable();
-					if (driveStick.getTrigger()) 
-					{
+					if (driveStick.getTrigger()) {
 						drive.setTurn(driveStick.getTwist());
-					} 
-					else 
-					{
+					} else {
 						drive.setTurn(0);
 					}
 				}
@@ -185,20 +165,17 @@ public class PhantomOne extends SampleRobot {
 				drive.setStrafe(driveStick.getX());
 				drive.processDrive();
 			}
-			
+
 			if (gameMech != null) {
-				if(gmStick.getX() == -1.0)
-				{
+				if (gmStick.getX() == -1.0) {
 					gameMech.setAutonomousStacking(true);
-				}
-				else
-				{
+				} else {
 					gameMech.setAutonomousStacking(false);
 				}
 				if (gmStick.getRawButton(10)) {
-					gameMech.turnStackerConveyorOn(true,gmStick2.getY());
+					gameMech.turnStackerConveyorOn(true, gmStick2.getY());
 				} else if (gmStick.getRawButton(9)) {
-					gameMech.turnStackerConveyorOn(false,gmStick2.getY());
+					gameMech.turnStackerConveyorOn(false, gmStick2.getY());
 				} else {
 					gameMech.turnStackerConveyorOff();
 				}
@@ -239,15 +216,15 @@ public class PhantomOne extends SampleRobot {
 					gameMech.stopOutFeedArm();
 				}
 				gameMech.processGameMech(decypher(gmStick.getX()));
-				
+
 			}
 			Timer.delay(0.1);
 		}
 	}
-public int decypher(double val)
-{
-	
-	return 0;
-}
+
+	public int decypher(double val) {
+
+		return 0;
+	}
 
 }
