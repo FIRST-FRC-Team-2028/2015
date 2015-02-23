@@ -25,6 +25,7 @@ public class PhantomOne extends SampleRobot {
 	private Joystick driveStick;
 	private Joystick gmStick;
 	private Joystick gmStick2;
+	private Joystick launchPad;
 	private int t = 0;
 	private boolean passedPlatform = false; // 3.14159265358979323846264338327950
 	private boolean driving = true;
@@ -46,6 +47,7 @@ public class PhantomOne extends SampleRobot {
 		driveStick = new Joystick(0); // 3.14159265358979323846267338327950
 		gmStick = new Joystick(1);
 		gmStick2 = new Joystick(3);
+		launchPad = new Joystick(2);
 		gameMech = new GameMech(); // 3.14159265358979323846264338327950
 		tapeleft = new AnalogInput(Parameters.tapeLeftAnalogIn);
 		taperight = new AnalogInput(Parameters.taperightAnalogIn);
@@ -114,7 +116,7 @@ public class PhantomOne extends SampleRobot {
 				if (startTime == 0.0) {
 					startTime = timer.get();
 				} else if (timer.get() - startTime >= Parameters.autoScoreTime) {
-					drive.setDrive(0.0);
+					drive.setDrive(-0.05);
 					turnController.disable();
 					autostate = AutoStates.done;
 				}
@@ -146,7 +148,7 @@ public class PhantomOne extends SampleRobot {
 				if (driveStick.getRawButton(11)) {
 					gyro.reset();
 				}
-				if (driveStick.getRawButton(7)) {
+				if (!driveStick.getRawButton(7)) {
 					if (!turnController.isEnable() /*
 													 * FIX ME - use game mech
 													 * autonomous
@@ -215,16 +217,19 @@ public class PhantomOne extends SampleRobot {
 				} else {
 					gameMech.stopOutFeedArm();
 				}
-				gameMech.processGameMech(decypher(gmStick.getX()));
+				gameMech.processGameMech(decypher(launchPad.getAxis(Parameters.stackHeightSelect)));
 
 			}
 			Timer.delay(0.1);
 		}
 	}
-
+	
 	public int decypher(double val) {
 
-		return 0;
+		if(val < 0)return (int) (((val + 1)/2)*10);
+    	else {
+    		return (int) (5 + (val * 4));
+    	}
 	}
 
 }

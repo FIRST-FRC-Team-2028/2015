@@ -10,7 +10,7 @@ public class GameMech {
 
     private Stacker stacker;
     private GameMechState state;
-    public Outfeed outfeed;
+    private Outfeed outfeed;
     private Infeed infeed;
     private Solenoid readyLight;
     private boolean fwd = true;

@@ -1,5 +1,7 @@
 package com.phantommentalists.Twenty15;
 
+import edu.wpi.first.wpilibj.Joystick.AxisType;
+
 public class Parameters {
 	
   public static final int frontLeftCanId = 11;
@@ -48,5 +50,7 @@ public class Parameters {
   public static final double autoFailsafeScoringTime = 5.0;
   public static final double autoTapeThreshHold = 450;
   public static final double autoScoreTime = 0.1;
+  
+  public static final AxisType stackHeightSelect = AxisType.kX;
 
 }
