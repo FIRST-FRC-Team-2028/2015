@@ -46,8 +46,8 @@ public class PhantomOne extends SampleRobot {
 				Parameters.steeringDerivativeValue, gyro, turnPIDOut);
 		driveStick = new Joystick(0); // 3.14159265358979323846267338327950
 		gmStick = new Joystick(1);
-		gmStick2 = new Joystick(3);
-		launchPad = new Joystick(2);
+		gmStick2 = new Joystick(2);
+		launchPad = new Joystick(3);
 		gameMech = new GameMech(); // 3.14159265358979323846264338327950
 		tapeleft = new AnalogInput(Parameters.tapeLeftAnalogIn);
 		taperight = new AnalogInput(Parameters.taperightAnalogIn);
