@@ -17,6 +17,7 @@ public class Stacker {
     private int currentstackheight = 0;
     private int desiredstackheight = -1;
     private boolean autopilot = false;
+    private boolean canAddTote = false;
 
   public Stacker()
   {
@@ -27,29 +28,38 @@ public class Stacker {
 	  conveyorMotor.changeControlMode(ControlMode.PercentVbus);
 	  conveyorMotor.enableControl();
   }
-  public void processStacker()
+  public void processStacker(int height)
   {
+	  desiredstackheight = height;
 	  SmartDashboard.putBoolean("Stacker tote indicator", toteIndicator.get());
 	  SmartDashboard.putNumber("Stack count", currentstackheight);
-	  if(!toteIndicator.get() && isElevatorDown())
-	  {
-		  currentstackheight++;
-	  }
+	  SmartDashboard.putString("Stacker state", state.toString());
 	  if(autopilot)
 	  {
 		  if(state == StackerState.Unknown)
 		  {
 			  moveElevatorUp();
 		  }
-		  if(isElevatorUp() && state == StackerState.RaiseingElevator)
+		  else if(isElevatorUp() && state == StackerState.RaiseingElevator)
 		  {
 			  state = StackerState.WaitingForTote;
+			  canAddTote = true;
+			  turnConveyorOn(true);
 		  }
-		  if(state == StackerState.LoweringElevator && isElevatorDown())
+		  else if(state == StackerState.WaitingForTote && !toteIndicator.get())
+		  {
+			  moveElevatorDown();
+		  }
+		  else if(state == StackerState.LoweringElevator && isElevatorDown())
 		  {
 			  state = StackerState.TotePickedUp;
+			  if(!toteIndicator.get() && canAddTote)
+			  {
+				  currentstackheight++;
+				  canAddTote = false;
+			  }
 		  }
-		  if(state == StackerState.Unloading)
+		  else if(state == StackerState.Unloading)
 		  {
 			  if(isConveyorOn() && toteIndicator.get())
 			  {
@@ -60,6 +70,18 @@ public class Stacker {
 			  {
 				  emptyStacker();
 			  }
+		  }
+	  }
+	  else
+	  {
+		  if(!toteIndicator.get() && isElevatorDown() && canAddTote)
+		  {
+			  currentstackheight++;
+			  canAddTote = false;
+		  }
+		  else if(isElevatorUp() && !canAddTote)
+		  {
+			  canAddTote = true;
 		  }
 	  }
 	  elevator.processElevator();
@@ -101,15 +123,29 @@ public class Stacker {
    *  This method will empty the stacker by lowering the current stack (if necessary) and turning on the conveyor/rollers.
    */
   public void emptyStacker() {
-	  if(state == StackerState.WaitingForTote)
+	  if(state == StackerState.TotePickedUp)
 	  {
-		  moveElevatorDown();
+		  conveyorMotor.set(Parameters.stackerConveyorVoltage);
 		  state = StackerState.Unloading;
 	  }
-	  else if(state == StackerState.Unloading && isElevatorDown())
+	  else if(state == StackerState.TotePickedUp)
 	  {
-		  conveyorMotor.set(1.0);
+		  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+		  state = StackerState.Unloading;
 	  }
+//	  if(state == StackerState.WaitingForTote)
+//	  {
+//		  moveElevatorDown();
+//		  state = StackerState.Unloading;
+//	  }
+//	  else if(isElevatorDown())
+//	  {
+//		  state = StackerState.Unloading;
+//	  }
+//	  else if(state == StackerState.Unloading)
+//	  {
+//		  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+//	  }
   }
   /** 
    *  This method returns true when the elevator is in the up position when we are building a stack or 
@@ -148,21 +184,56 @@ public class Stacker {
 	  elevator.stop();
   }
   
-  public void turnConveyorOn(double speed)
+  public void turnConveyorOn(boolean fwd)
   {
-	  if(elevator.isUp() && toteIndicator.get())
+	  if(autopilot)
 	  {
-		  conveyorMotor.set(speed);
-	  }
-	  else if(elevator.isDown())
-	  {
-		  conveyorMotor.set(speed);
+		  if(elevator.isUp() && toteIndicator.get())
+		  {
+			  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+		  }
+		  else if(elevator.isDown())
+		  {
+			  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+		  }
+		  else
+		  {
+			  turnConveyorOff();
+		  }
 	  }
 	  else
-	  {
-		  conveyorMotor.set(0.0);
+	  {		
+		  if(fwd)
+		  {
+			  if(elevator.isUp() && toteIndicator.get())
+			  {
+				  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+			  }
+			  else if(elevator.isDown())
+			  {
+				  conveyorMotor.set(Parameters.stackerConveyorVoltage);
+			  }
+			  else
+			  {
+				  turnConveyorOff();
+			  }
+		  }
+		  else
+		  {
+			  if(elevator.isUp() && toteIndicator.get())
+			  {
+				  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
+			  }
+			  else if(elevator.isDown())
+			  {
+				  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
+			  }
+			  else
+			  {
+				  turnConveyorOff();
+			  }
+		  }
 	  }
-	  
   }
   
   public void turnConveyorOff()
@@ -213,9 +284,43 @@ public class Stacker {
 	  else
 		  return false;
   }
+  
+  public void setAutoPilot(boolean value)
+  {
+	  autopilot = value;
+  }
 
   public boolean toteReadyForStack() {
   return false;
   }
-
+  
+  public boolean isWaiting()
+  {
+	  return (state == StackerState.WaitingForTote);
+  }
+  
+  public boolean isRaising()
+  {
+	  return (state == StackerState.RaiseingElevator);
+  }
+  
+  public boolean isLowering()
+  {
+	  return (state == StackerState.LoweringElevator);
+  }
+  
+  public boolean isTotePickedUp()
+  {
+	  return (state == StackerState.TotePickedUp);
+  }
+  
+  public boolean isUnloading()
+  {
+	  return (state == StackerState.Unloading);
+  }
+  
+  public boolean isUnknown()
+  {
+	  return (state == StackerState.Unknown);
+  }
 }

@@ -6,6 +6,6 @@ public enum OutfeedStates {
 	
 	conveying,
 	
-	nothing
+	ready
 
 }

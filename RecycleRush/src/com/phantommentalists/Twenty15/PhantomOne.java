@@ -213,12 +213,12 @@ public class PhantomOne extends SampleRobot {
 				//
 				if (gmStick.getRawButton(8)) {
 					if (gmStick2.getX() >= 0 && gmStick2.getX() < 1)
-						gameMech.turnOutFeedConveyorOn((gmStick2.getX()));
+						gameMech.turnOutFeedConveyorOn(true);
 					else if (gmStick.getX() <= 0 && gmStick2.getX() > -1)
-						gameMech.turnOutFeedConveyorOn(gmStick2.getX());
+						gameMech.turnOutFeedConveyorOn(true);
 				} else if (gmStick.getRawButton(7)) {
 					// TODO:DONT DO THIS
-					gameMech.turnOutFeedConveyorOn(-Parameters.outfeedConveyorVoltageFast);
+					gameMech.turnOutFeedConveyorOn(false);
 				} else {
 					gameMech.turnOutFeedConveyorOff();
 				}
@@ -238,11 +238,16 @@ public class PhantomOne extends SampleRobot {
 				} else {
 					gameMech.stopOutFeedArm();
 				}
-				gameMech.processGameMech();
+				gameMech.processGameMech(decypher(gmStick.getX()));
 				
 			}
 			Timer.delay(0.1);
 		}
 	}
+public int decypher(double val)
+{
+	
+	return 0;
+}
 
 }

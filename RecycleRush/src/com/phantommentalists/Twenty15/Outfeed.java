@@ -22,6 +22,7 @@ public class Outfeed {
 	private boolean timerdone = false;
 	private boolean autopilot = false;
 	private OutfeedStates state;
+	private boolean isStackOff = false;
 	
 	private class delay extends TimerTask
 	{
@@ -31,8 +32,15 @@ public class Outfeed {
 		
 	}
 	
+	private class delay2 extends TimerTask
+	{
+		public void run(){
+			isStackOff = true;
+		}
+	}
+	
 	public Outfeed() {
-		state = OutfeedStates.nothing;
+		state = OutfeedStates.ready;
 		toteOut = new DigitalInput(Parameters.outfeedToteLimitSwitch);
 
 		pusher = new CANTalon(Parameters.outfeedArmCANId);
@@ -62,16 +70,24 @@ public class Outfeed {
 		{
 			state = OutfeedStates.conveying;
 		}
+		else if(isPusherLeft())
+		{
+			moveStackRight();
+		}
 		else
 		{
-			state = OutfeedStates.nothing;
+			state = OutfeedStates.ready;
 		}
 	}
 	/**
 	 * This method will move a stack forward in the outfeed.
 	 */
-	public void moveStackForward(double power) {
-		if(toteOut.get())
+	public void moveStackForward(boolean fwd) {
+		if(!fwd)
+		{
+			roller.set(-Parameters.outfeedConveyorVoltageSlow);
+		}
+		else if(toteOut.get())
 		{
 			timerdone = false;
 			roller.set(Parameters.outfeedConveyorVoltageSlow);
@@ -86,6 +102,14 @@ public class Outfeed {
 		else if(timerdone && !toteOut.get())
 		{
 			roller.set(Parameters.outfeedConveyorVoltageFast);
+			timertask = new delay2();
+			timer = new Timer();
+			timer.schedule(timertask, 500);
+		}
+		else if(isStackOff && !toteOut.get())
+		{
+			roller.set(0.0);
+			moveStackLeft();
 		}
 	}
 	
@@ -112,6 +136,11 @@ public class Outfeed {
 	public void stopPusher()
 	{
 		pusher.set(0.0);
+	}
+	
+	public void setAutoPilot(boolean value)
+	{
+		autopilot = value;
 	}
 
 	/**
@@ -147,8 +176,8 @@ public class Outfeed {
 		return (state == OutfeedStates.movingarm);
 	}
 	
-	public boolean isNothing()
+	public boolean isReady()
 	{
-		return (state == OutfeedStates.nothing);
+		return (state == OutfeedStates.ready);
 	}
 }

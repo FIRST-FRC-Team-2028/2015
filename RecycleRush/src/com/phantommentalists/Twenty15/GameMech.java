@@ -18,6 +18,7 @@ public class GameMech {
 
   public GameMech()
   {
+	  state = GameMechState.Unknown;
 	  stacker = new Stacker();
 	  outfeed = new Outfeed();
 	  infeed = new Infeed();
@@ -40,13 +41,20 @@ public class GameMech {
   
   public void turnStackerConveyorOn(boolean fwd,double speed)
   {
-	  if (fwd)
+	  if(autopilot)
 	  {
-		  stacker.turnConveyorOn(speed);
+		  stacker.turnConveyorOn(fwd);
 	  }
 	  else 
 	  {
-		  stacker.turnConveyorOn(-speed);
+		  if (fwd)
+		  {
+			  stacker.turnConveyorOn(fwd);
+		  }
+		  else 
+		  {
+			  stacker.turnConveyorOn(fwd);
+		  }
 	  }
   }
   
@@ -72,9 +80,9 @@ public class GameMech {
 	  infeed.stopInfeed();
   }
   
-  public void turnOutFeedConveyorOn(double power)
+  public void turnOutFeedConveyorOn(boolean fwd)
   {
-	  outfeed.moveStackForward(power);
+	  outfeed.moveStackForward(fwd);
   }
   
   public void turnOutFeedConveyorOff()
@@ -103,16 +111,24 @@ public class GameMech {
   public void unload() {
   }
 
-  public void processGameMech() {
+  public void processGameMech(int height) {
 	  if(autopilot)
 	  {
-		  
+		  if(stacker.isStackDone())
+		  {
+			  stacker.emptyStacker();
+			  outfeed.moveStackForward(true);
+		  }
+		  if(!outfeed.isConveying())
+		  {
+			  
+		  }
 	  }
-	  else
+	  if(infeed.isDeployed() && state == GameMechState.Unknown)
 	  {
+		  state = GameMechState.Deployed;
 	  }
-	  
-	  stacker.processStacker();
+	  stacker.processStacker(height);
 	  outfeed.processOutfeed();
 	  infeed.processInfeed();
   }
@@ -121,6 +137,7 @@ public class GameMech {
   {
 	  infeed.deployInfeed();
 	  stacker.moveElevatorUp();
+	  outfeed.moveStackRight();
   }
  
   public void setStackZero()
@@ -163,6 +180,8 @@ public class GameMech {
    */
   public void setAutonomousStacking(boolean auto) {
 	  autopilot = auto;
+	  stacker.setAutoPilot(auto);
+	  outfeed.setAutoPilot(auto);
 	  if(auto)
 	  {
 		  initAutoPilot();
