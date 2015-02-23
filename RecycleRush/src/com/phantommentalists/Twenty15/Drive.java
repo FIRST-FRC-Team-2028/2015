@@ -2,7 +2,7 @@ package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * CrabDrive allocation
@@ -82,6 +82,10 @@ public class Drive {
 		frontRightOutput = yIn - xIn - turn;
 		rearLeftOutput = yIn - xIn + turn;
 		rearRightOutput = xIn + yIn - turn;
+		SmartDashboard.putNumber("FL: ", frontLeftOutput);
+		SmartDashboard.putNumber("FR: ", -frontRightOutput);
+		SmartDashboard.putNumber("RL: ", rearLeftOutput);
+		SmartDashboard.putNumber("RR: ", -rearRightOutput);
 		frontLeft.set(frontLeftOutput);
 		frontRight.set(frontRightOutput * -1);
 		rearLeft.set(rearLeftOutput);

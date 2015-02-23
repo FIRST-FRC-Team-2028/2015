@@ -12,7 +12,7 @@ public class TurnPIDOut implements PIDOutput {
 	}
   
   public void pidWrite(double output) {
-	  drive.setTurn(output);
+	  drive.setTurn(-output);
   }
 
 }

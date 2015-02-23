@@ -2,6 +2,7 @@ package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * Author: Hunter Lawrence
@@ -18,6 +19,9 @@ public class Elevator {
 	  leftMotor.changeControlMode(ControlMode.PercentVbus);
 	  rightMotor.changeControlMode(ControlMode.PercentVbus);
 	  
+	  leftMotor.enableBrakeMode(true);
+	  rightMotor.enableBrakeMode(true);
+	  
 	  leftMotor.enableLimitSwitch(true, true);
 	  rightMotor.enableLimitSwitch(true, true);
 	  
@@ -26,10 +30,15 @@ public class Elevator {
   }
   public void processElevator()
   {
-	  if(isUp() || isDown())
-	  {
-		  stop();
-	  } 
+	  SmartDashboard.putBoolean("Stacker up left limit", leftMotor.isRevLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker up right limit", rightMotor.isFwdLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker down left limit", leftMotor.isFwdLimitSwitchClosed());
+	  SmartDashboard.putBoolean("Stacker down right limit", rightMotor.isRevLimitSwitchClosed());
+
+//	  if(isUp() || isDown())
+//	  {
+//		  stop();
+//	  } 
   }
   /** 
    *  This method moves the elevator side to the up position.
@@ -81,7 +90,7 @@ public class Elevator {
    */
   public boolean isUp() {
 	  //TODO: Just thrown in there fwd/rev limit switches not known
-	  if(leftMotor.isFwdLimitSwitchClosed() && rightMotor.isFwdLimitSwitchClosed())
+	  if(leftMotor.isRevLimitSwitchClosed() && rightMotor.isFwdLimitSwitchClosed())
 		  return true;
 	  else
 		  return false;
@@ -92,7 +101,7 @@ public class Elevator {
    */
   public boolean isDown() {
 	  //TODO: Same as the TODO in isUp()
-	  if(leftMotor.isRevLimitSwitchClosed() && rightMotor.isRevLimitSwitchClosed())
+	  if(leftMotor.isFwdLimitSwitchClosed() && rightMotor.isRevLimitSwitchClosed())
 		  return true;
 	  else
 		  return false;

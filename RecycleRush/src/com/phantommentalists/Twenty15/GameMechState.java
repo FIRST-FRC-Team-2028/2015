@@ -3,14 +3,12 @@ package com.phantommentalists.Twenty15;
 /*
  */
 public enum GameMechState {
+	
+  Unknown,
 
-  Empty,
-
+  Deployed,
+  
   Stacking,
 
-  Retracted,
-  
-  Deployed;
-
-  
+  Outfeeding
 }

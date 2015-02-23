@@ -1,7 +1,5 @@
 package com.phantommentalists.Twenty15;
 
-import edu.wpi.first.wpilibj.Joystick.AxisType;
-
 public class Parameters {
 	
   public static final int frontLeftCanId = 11;
@@ -12,56 +10,43 @@ public class Parameters {
 
   public static final int rearRightCanId = 14;
   
-  public static final int stackerLeftCANId = 23;
-  
-  public static final int stackerRightCANId = 22;
-  
-  public static final int stackerConveyorCANId = 21;
-  
-  public static final int infeedCANId = 40;
-  
-  public static final double infeedPower = 0.5;
-  
 //  Outfeed Values
    
   public static final int outfeedConveyorCANId = 31;
   public static final int outfeedArmCANId = 30;
-  public static final int outfeedToteLimitSwitch = -1;
-  public static final double outfeedConveyorVoltage = 12;
-  public static final double outfeedPusherVoltage = 12;
+  public static final int outfeedToteLimitSwitch = 0;
+  public static final double outfeedConveyorVoltageSlow = 0.35;
+  public static final double outfeedConveyorVoltageFast = 1.0;
+  public static final double outfeedPusherVoltage = 1.0;
+  
+  public static final int stackerLeftCANId = 22;
+  public static final int stackerRightCANId = 23;
+  public static final int stackerConveyorCANId = 21;
+  public static final double stackerConveyorVoltage = 1.0;
+  public static final double stackerElevatorUpVoltage = 1.0;
+  public static final double stackerElevatorDownVoltage = -stackerElevatorUpVoltage;
 
-  public static final int steeringProportionalValue = 0;
+  public static final double steeringProportionalValue = 0.05;
 
-  public static final int steeringIntegralValue = 0;
+  public static final double steeringIntegralValue = 0.001;
 
-  public static final int steeringDerivativeValue = 0;
+  public static final double steeringDerivativeValue = 0.001;
 
   public static final double maxMotorVoltage = 12.0;
+
+  public static final int infeedCANId = 40;
+
+  public static final double infeedPower = 1.0;
   
-  public static final double stackerConveyorVoltage = 1;
+  public static final int gyroAnalogIn = 0;
+  public static final int tapeLeftAnalogIn = 3;
+  public static final int taperightAnalogIn = 2;
   
-  //Button Values by Joystick
-  
-  	//GameMech
-  	public static final int buttonPusherLeft = 1;
-  	
-  	public static final int buttonPusherRight = 2;
-  	
-  	public static final int buttonOutfeedConveyorFwd = 8;
-  	
-  	public static final int buttonOutfeedConveyorRev = 7;
-  	
-  	public static final int buttonStackerUp = 4;
-  	
-  	public static final int buttonStackerDown = 3;
-  	
-  	public static final int buttonStackerConveyorFwd = 10;
-  	
-  	public static final int buttonStackerConveyorRev = 9;
-  	
-  	public static final int buttonInfeedUp = 6;
-  	
-  	public static final int buttonInfeedDown = 5;
-  	
-  	public static final AxisType axisInfeedIndicator = AxisType.kX;
+  public static final double autoLiftTime = 0.6;
+  public static final double autoDrivePower = 0.5;
+  public static final double autoFailsafeCarpetTime = 7.5;
+  public static final double autoFailsafeScoringTime = 5.0;
+  public static final double autoTapeThreshHold = 450;
+  public static final double autoScoreTime = 0.1;
+
 }
