@@ -116,7 +116,7 @@ public class PhantomOne extends SampleRobot {
 				if (startTime == 0.0) {
 					startTime = timer.get();
 				} else if (timer.get() - startTime >= Parameters.autoScoreTime) {
-					drive.setDrive(-0.05);
+					drive.setDrive(0.0);
 					turnController.disable();
 					autostate = AutoStates.done;
 				}
@@ -143,7 +143,6 @@ public class PhantomOne extends SampleRobot {
 			SmartDashboard.putNumber("Joystick x:", driveStick.getX());
 			SmartDashboard.putNumber("JoyStick y:", driveStick.getY());
 			// SmartDashboard.putBoolean("StackerTote Inicator", );
-			System.out.println("printing");
 			if (drive != null) {
 				if (driveStick.getRawButton(11)) {
 					gyro.reset();
@@ -200,16 +199,23 @@ public class PhantomOne extends SampleRobot {
 				} else {
 					gameMech.stopInfeed();
 				}
-
 				if (gmStick.getRawButton(1)) {
 					gameMech.moveOutFeedArmLeft();
-					driveController.enable();
+					if(!driveController.isEnable())
+					{
+						driveController.enable();
+						gyro.reset();
+					}
 				} else if (gmStick.getRawButton(2)) {
 					gameMech.moveOutFeedArmRight();
-					driveController.disable();
+					if(!driveController.isEnable())
+					{
+						driveController.enable();
+						gyro.reset();
+					}
 				} else {
 					gameMech.stopOutFeedArm();
-					driveController.disable();
+					if(driveController.isEnable())driveController.disable();
 				}
 				gameMech.processGameMech(decypher(launchPad
 						.getAxis(Parameters.stackHeightSelect)));
@@ -220,7 +226,6 @@ public class PhantomOne extends SampleRobot {
 	}
 
 	public int decypher(double val) {
-
 		if (val < 0)
 			return (int) (((val + 1) / 2) * 10);
 		else {
