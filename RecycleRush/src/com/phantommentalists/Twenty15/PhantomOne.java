@@ -148,21 +148,12 @@ public class PhantomOne extends SampleRobot {
 				if (driveStick.getRawButton(11)) {
 					gyro.reset();
 				}
-				if (!driveStick.getRawButton(7)) {
-					if (!turnController.isEnable() /*
-													 * FIX ME - use game mech
-													 * autonomous
-													 */) {
-						turnController.enable();
-					}
+				if (driveStick.getTrigger()) {
+					drive.setTurn(driveStick.getTwist());
 				} else {
-					turnController.disable();
-					if (driveStick.getTrigger()) {
-						drive.setTurn(driveStick.getTwist());
-					} else {
-						drive.setTurn(0);
-					}
+					drive.setTurn(0);
 				}
+
 				drive.setDrive(driveStick.getY());
 				drive.setStrafe(driveStick.getX());
 				drive.processDrive();
@@ -212,24 +203,29 @@ public class PhantomOne extends SampleRobot {
 
 				if (gmStick.getRawButton(1)) {
 					gameMech.moveOutFeedArmLeft();
+					driveController.enable();
 				} else if (gmStick.getRawButton(2)) {
 					gameMech.moveOutFeedArmRight();
+					driveController.disable();
 				} else {
 					gameMech.stopOutFeedArm();
+					driveController.disable();
 				}
-				gameMech.processGameMech(decypher(launchPad.getAxis(Parameters.stackHeightSelect)));
+				gameMech.processGameMech(decypher(launchPad
+						.getAxis(Parameters.stackHeightSelect)));
 
 			}
 			Timer.delay(0.1);
 		}
 	}
-	
+
 	public int decypher(double val) {
 
-		if(val < 0)return (int) (((val + 1)/2)*10);
-    	else {
-    		return (int) (5 + (val * 4));
-    	}
+		if (val < 0)
+			return (int) (((val + 1) / 2) * 10);
+		else {
+			return (int) (5 + (val * 4));
+		}
 	}
 
 }
