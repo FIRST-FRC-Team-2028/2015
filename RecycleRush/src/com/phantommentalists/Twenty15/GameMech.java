@@ -15,6 +15,7 @@ public class GameMech {
     private Solenoid readyLight;
     private boolean fwd = true;
     private boolean autopilot = false;
+    private boolean move = false;
 
   public GameMech()
   {
@@ -117,19 +118,22 @@ public class GameMech {
 		  if(stacker.isStackDone())
 		  {
 			  stacker.emptyStacker();
-			  outfeed.moveStackForward(true);
+			  if(stacker.isEmpty())
+			  {
+				  move = true;
+			  }
 		  }
-		  if(!outfeed.isConveying())
-		  {
-			  
-		  }
+	  }
+	  if(outfeed.isStackAllTheWayOut())
+	  {
+		  move = false;
 	  }
 	  if(infeed.isDeployed() && state == GameMechState.Unknown)
 	  {
 		  state = GameMechState.Deployed;
 	  }
 	  stacker.processStacker(height);
-	  outfeed.processOutfeed();
+	  outfeed.processOutfeed(move);
 	  infeed.processInfeed();
   }
   
