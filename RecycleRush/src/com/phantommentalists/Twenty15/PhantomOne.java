@@ -20,7 +20,6 @@ public class PhantomOne extends SampleRobot {
 	private AnalogInput taperight;
 	private AnalogInput tapeleft;
 	private TurnPIDOut turnPIDOut;
-	private PIDController driveController;
 	private PIDController turnController;
 	private Joystick driveStick;
 	private Joystick gmStick;
@@ -34,6 +33,7 @@ public class PhantomOne extends SampleRobot {
 	private Timer timer;
 	private DigitalInput outfeedinput; // 3.14159265358979323846264338327950
 	private boolean autopilot = false;
+	private boolean automove = false;
 
 	public PhantomOne() {
 
@@ -134,6 +134,9 @@ public class PhantomOne extends SampleRobot {
 	}
 
 	public void operatorControl() {
+		timer.reset();
+		timer.start();
+		double starttime = 0.0;
 		while (isEnabled() && isOperatorControl()) {
 			SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
 			SmartDashboard.putNumber("Left Tape Sensor",
@@ -152,70 +155,95 @@ public class PhantomOne extends SampleRobot {
 				} else {
 					drive.setTurn(0);
 				}
-
+				if(!drive.isDeadband(driveStick.getY()) || !drive.isDeadband(driveStick.getX()))
+				{
+					automove = false;
+				}
+				else if(automove)
+				{
+					if(!gameMech.isInfeedDeployed())
+					{
+						gameMech.deployInfeed();
+					}
+					else
+					{
+						if(starttime == 0.0)
+						{
+							starttime = timer.get();
+						}
+						else if(timer.get() - starttime < Parameters.teleautomovetime)
+						{
+							drive.setDrive(0.5);
+						}
+						else
+						{
+							automove = false;
+						}
+					}
+				}
 				drive.setDrive(driveStick.getY());
 				drive.setStrafe(driveStick.getX());
 				drive.processDrive();
 			}
 
 			if (gameMech != null) {
-				if (gmStick.getX() == -1.0) {
+				if (gmStick2.getRawButton(9)) {
 					gameMech.setAutonomousStacking(true);
 				} else {
 					gameMech.setAutonomousStacking(false);
-				}
-				if (gmStick.getRawButton(10)) {
-					gameMech.turnStackerConveyorOn(true, gmStick2.getY());
-				} else if (gmStick.getRawButton(9)) {
-					gameMech.turnStackerConveyorOn(false, gmStick2.getY());
-				} else {
-					gameMech.turnStackerConveyorOff();
-				}
-				//
-				if (gmStick.getRawButton(4)) {
-					gameMech.raiseElevator();
-				} else if (gmStick.getRawButton(3)) {
-					gameMech.lowerElevator();
-				} else {
-					gameMech.stopElevator();
-				}
-				//
-				if (gmStick.getRawButton(8)) {
-					if (gmStick2.getX() >= 0 && gmStick2.getX() < 1)
-						gameMech.turnOutFeedConveyorOn(true);
-					else if (gmStick.getX() <= 0 && gmStick2.getX() > -1)
-						gameMech.turnOutFeedConveyorOn(true);
-				} else if (gmStick.getRawButton(7)) {
-					// TODO:DONT DO THIS
-					gameMech.turnOutFeedConveyorOn(false);
-				} else {
-					gameMech.turnOutFeedConveyorOff();
-				}
-
-				if (gmStick.getRawButton(5)) {
-					gameMech.deployInfeed();
-				} else if (gmStick.getRawButton(6)) {
-					gameMech.retractInfeed();
-				} else {
-					gameMech.stopInfeed();
-				}
-				if (gmStick.getRawButton(1)) {
-					gameMech.moveOutFeedArmLeft();
-					if(!driveController.isEnable())
-					{
-						driveController.enable();
-						gyro.reset();
+					if (gmStick.getRawButton(10)) {
+						gameMech.turnStackerConveyorOn(true, gmStick2.getY());
+					} else if (gmStick.getRawButton(9)) {
+						gameMech.turnStackerConveyorOn(false, gmStick2.getY());
+					} else {
+						gameMech.turnStackerConveyorOff();
 					}
-				} else if (gmStick.getRawButton(2)) {
-					gameMech.moveOutFeedArmRight();
-					if(!driveController.isEnable())
-					{
-						driveController.enable();
-						gyro.reset();
+					//
+					if (gmStick.getRawButton(4)) {
+						gameMech.raiseElevator();
+					} else if (gmStick.getRawButton(3)) {
+						gameMech.lowerElevator();
+					} else {
+						gameMech.stopElevator();
 					}
-				} else {
-					gameMech.stopOutFeedArm();
-					if(driveController.isEnable())driveController.disable();
+					//
+					if (gmStick.getRawButton(8)) {
+						if (gmStick2.getX() >= 0 && gmStick2.getX() < 1)
+							gameMech.turnOutFeedConveyorOn(true);
+						else if (gmStick.getX() <= 0 && gmStick2.getX() > -1)
+							gameMech.turnOutFeedConveyorOn(true);
+					} else if (gmStick.getRawButton(7)) {
+						// TODO:DONT DO THIS
+						gameMech.turnOutFeedConveyorOn(false);
+					} else {
+						gameMech.turnOutFeedConveyorOff();
+					}
+	
+					if (gmStick.getRawButton(5)) {
+						gameMech.deployInfeed();
+					} else if (gmStick.getRawButton(6)) {
+						gameMech.retractInfeed();
+					} else {
+						gameMech.stopInfeed();
+					}
+					if (gmStick.getRawButton(1)) {
+						gameMech.moveOutFeedArmLeft();
+						if(!turnController.isEnable())
+						{
+							turnController.enable();
+							gyro.reset();
+						}
+					} else if (gmStick.getRawButton(2)) {
+						gameMech.moveOutFeedArmRight();
+						if(!turnController.isEnable())
+						{
+							turnController.enable();
+							gyro.reset();
+						}
+					} else {
+						gameMech.stopOutFeedArm();
+						if(turnController.isEnable())turnController.disable();
+					}
 				}
 				gameMech.processGameMech(decypher(launchPad
 						.getAxis(Parameters.stackHeightSelect)));
@@ -227,9 +255,9 @@ public class PhantomOne extends SampleRobot {
 
 	public int decypher(double val) {
 		if (val < 0)
-			return (int) (((val + 1) / 2) * 10);
+			return (int) ((((val + 1) / 2) * 10)+0.05);
 		else {
-			return (int) (5 + (val * 4));
+			return (int) (5 + (val * 4)+0.05);
 		}
 	}
 

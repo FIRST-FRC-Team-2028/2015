@@ -34,6 +34,8 @@ public class Elevator {
 	  SmartDashboard.putBoolean("Stacker up right limit", rightMotor.isFwdLimitSwitchClosed());
 	  SmartDashboard.putBoolean("Stacker down left limit", leftMotor.isFwdLimitSwitchClosed());
 	  SmartDashboard.putBoolean("Stacker down right limit", rightMotor.isRevLimitSwitchClosed());
+	  SmartDashboard.putBoolean("isUp", isUp());
+	  SmartDashboard.putBoolean("isDown",isDown());
 
 //	  if(isUp() || isDown())
 //	  {

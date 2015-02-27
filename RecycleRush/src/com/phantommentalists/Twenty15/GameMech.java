@@ -15,6 +15,7 @@ public class GameMech {
     private Solenoid readyLight;
     private boolean fwd = true;
     private boolean autopilot = false;
+    private boolean isStackDone = false;
 
   public GameMech()
   {
@@ -111,17 +112,26 @@ public class GameMech {
   public void unload() {
   }
 
+  public void resetStackerState()
+  {
+	  stacker.resetStackerState();
+  }
+  
   public void processGameMech(int height) {
 	  if(autopilot)
 	  {
 		  if(stacker.isStackDone())
 		  {
+			  isStackDone = true;
 			  stacker.emptyStacker();
-			  outfeed.moveStackForward(true);
 		  }
-		  if(!outfeed.isConveying())
+		  if(isStackDone)
 		  {
-			  
+			  outfeed.moveStackForward(true);
+			  if(outfeed.isStackOff())
+			  {
+				  isStackDone = false;
+			  }
 		  }
 	  }
 	  if(infeed.isDeployed() && state == GameMechState.Unknown)
@@ -135,9 +145,9 @@ public class GameMech {
   
   public void initAutoPilot()
   {
-	  infeed.deployInfeed();
-	  stacker.moveElevatorUp();
-	  outfeed.moveStackRight();
+//	  infeed.deployInfeed();
+////	  stacker.moveElevatorUp();
+//	  outfeed.moveStackRight();
   }
  
   public void setStackZero()
@@ -147,6 +157,12 @@ public class GameMech {
 		  stacker.setStackToZero();
 	  }
   }
+  
+  public boolean isInfeedDeployed()
+  {
+	  return infeed.isDeployed();
+  }
+  
   /** 
    *  This method returns true if the game mechanisms are empty, false otherwise.
    */

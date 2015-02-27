@@ -51,6 +51,8 @@ public class Parameters {
   public static final double autoTapeThreshHold = 450;
   public static final double autoScoreTime = 0.1;
   
+  public static final double teleautomovetime = 2.5;
+  
   public static final AxisType stackHeightSelect = AxisType.kX;
 
 }

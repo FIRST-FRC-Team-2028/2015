@@ -18,11 +18,14 @@ public class Outfeed {
 	private DigitalInput toteOut;
 	private boolean left = false;
 	private TimerTask timertask;
+	private TimerTask timertask2;
 	private Timer timer;
+	private Timer timer2;
 	private boolean timerdone = false;
 	private boolean autopilot = false;
 	private OutfeedStates state;
 	private boolean isStackOff = false;
+	private boolean movingfast = false;
 	
 	private class delay extends TimerTask
 	{
@@ -52,7 +55,7 @@ public class Outfeed {
 		pusher.enableBrakeMode(true);
 
 		pusher.enableLimitSwitch(true, true);
-		
+				
 		pusher.enableControl();
 		roller.enableControl();
 		
@@ -61,22 +64,32 @@ public class Outfeed {
 	{
 		SmartDashboard.putBoolean("Outfeed tote indicator", toteOut.get());
 		SmartDashboard.putNumber("Outfeed current",pusher.getOutputCurrent());
+		SmartDashboard.putNumber("Outfeed roller voltage",roller.getOutputVoltage());
 		
-		if(!pusher.isFwdLimitSwitchClosed() || !pusher.isRevLimitSwitchClosed())
+		if(autopilot)
 		{
-			state = OutfeedStates.movingarm;
-		}
-		else if(roller.getOutputVoltage() > 0 || !toteOut.get())
-		{
-			state = OutfeedStates.conveying;
-		}
-		else if(isPusherLeft())
-		{
-			moveStackRight();
-		}
-		else
-		{
-			state = OutfeedStates.ready;
+			if(!pusher.isFwdLimitSwitchClosed() || !pusher.isRevLimitSwitchClosed())
+			{
+				state = OutfeedStates.movingarm;
+			}
+			else if(roller.getOutputVoltage() > 0 || !toteOut.get())
+			{
+				state = OutfeedStates.conveying;
+			}
+			else
+			{
+				state = OutfeedStates.ready;
+			}
+			if(isStackOff && autopilot)
+			{
+				stopConveyor();
+				moveStackLeft();
+				isStackOff = false;
+			}
+			if(isPusherLeft())
+			{
+				moveStackRight();
+			}
 		}
 	}
 	/**
@@ -87,9 +100,9 @@ public class Outfeed {
 		{
 			roller.set(-Parameters.outfeedConveyorVoltageSlow);
 		}
-		else if(toteOut.get())
+		else if(toteOut.get() && !timerdone)
 		{
-			timerdone = false;
+			movingfast = false;
 			roller.set(Parameters.outfeedConveyorVoltageSlow);
 		}
 		else if(!toteOut.get() && !timerdone)
@@ -97,20 +110,31 @@ public class Outfeed {
 			roller.set(0.0);
 			timertask = new delay();
 			timer = new Timer();
-			timer.schedule(timertask, 250);
+			timer.schedule(timertask, 750);
 		}
 		else if(timerdone && !toteOut.get())
 		{
+			movingfast = true;
 			roller.set(Parameters.outfeedConveyorVoltageFast);
-			timertask = new delay2();
-			timer = new Timer();
-			timer.schedule(timertask, 500);
 		}
-		else if(isStackOff && !toteOut.get())
+		else if(timerdone && toteOut.get() && movingfast)
+		{
+			movingfast = false;
+			timertask2 = new delay2();
+			timer2 = new Timer();
+			timer2.schedule(timertask2, 500);
+		}
+		else if(isStackOff && toteOut.get())
 		{
 			roller.set(0.0);
-			moveStackLeft();
+			movingfast = false;
+			timerdone = false;
 		}
+	}
+	
+	public boolean isStackOff()
+	{
+		return isStackOff;
 	}
 	
 	public void stopConveyor() {
