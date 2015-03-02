@@ -46,6 +46,7 @@ public class Stacker {
 	  SmartDashboard.putNumber("Stack count", currentstackheight);
 	  SmartDashboard.putNumber("Desired Stack", desiredstackheight);
 	  SmartDashboard.putString("Stacker state", state.toString());
+	  SmartDashboard.putNumber("Stacker Conveyor Current", conveyorMotor.getOutputCurrent());
 	  if(autopilot)
 	  {
 		  if(state == StackerState.Unknown)
@@ -65,7 +66,10 @@ public class Stacker {
 		  
 		  else if(state == StackerState.TotePickedUp)
 		  {
-			  moveElevatorUp();
+			  if(!isStackDone())
+			  {
+				  moveElevatorUp();
+			  }
 		  }
 		  else if(state == StackerState.LoweringElevator && isElevatorDown())
 		  {
@@ -142,7 +146,7 @@ public class Stacker {
    *  Returns true when the current stack is finished, false otherwise
    */
   public boolean isStackDone() {
-	  if(currentstackheight == desiredstackheight)
+	  if(currentstackheight >= desiredstackheight)
 	  {
 		  return true;
 	  }
