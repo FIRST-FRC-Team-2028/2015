@@ -1,6 +1,7 @@
 package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  */
@@ -15,6 +16,7 @@ public class GameMech {
     private Solenoid readyLight;
     private boolean fwd = true;
     private boolean autopilot = false;
+    private boolean autopilotinit = false;
     private boolean isStackDone = false;
 
   public GameMech()
@@ -117,17 +119,23 @@ public class GameMech {
 	  stacker.resetStackerState();
   }
   
+  public boolean isElevatorUp()
+  {
+	  return stacker.isElevatorUp();
+  }
+  
   public void processGameMech(int height) {
 	  if(autopilot)
 	  {
+		  SmartDashboard.putBoolean("isStackDone",stacker.isStackDone());
 		  if(stacker.isStackDone())
 		  {
 			  isStackDone = true;
-			  stacker.emptyStacker();
 		  }
 		  if(isStackDone)
 		  {
 			  outfeed.moveStackForward(true);
+			  stacker.emptyStacker();
 			  if(outfeed.isStackOff())
 			  {
 				  isStackDone = false;
@@ -198,9 +206,14 @@ public class GameMech {
 	  autopilot = auto;
 	  stacker.setAutoPilot(auto);
 	  outfeed.setAutoPilot(auto);
-	  if(auto)
+	  if(auto && !autopilotinit)
 	  {
 		  initAutoPilot();
+		  autopilot = true;
+	  }
+	  else
+	  {
+		  autopilotinit = false;
 	  }
   }
 

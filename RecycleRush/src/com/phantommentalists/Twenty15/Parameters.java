@@ -1,5 +1,7 @@
 package com.phantommentalists.Twenty15;
 
+import java.util.Date;
+
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 
 public class Parameters {
@@ -18,7 +20,8 @@ public class Parameters {
   public static final int outfeedArmCANId = 30;
   public static final int outfeedToteLimitSwitch = 0;
   public static final double outfeedConveyorVoltageSlow = 0.35;
-  public static final double outfeedConveyorVoltageFast = 1.0;
+  public static final double outfeedConveyorVoltageFast = .9;
+  public static final int feedConveyorPuaseDelay = 1000;
   public static final double outfeedPusherVoltage = 1.0;
   
   public static final int stackerLeftCANId = 22;
@@ -46,13 +49,17 @@ public class Parameters {
   
   public static final double autoLiftTime = 0.6;
   public static final double autoDrivePower = 0.5;
-  public static final double autoFailsafeCarpetTime = 7.5;
-  public static final double autoFailsafeScoringTime = 5.0;
+  public static final double autoFailsafeCarpetTime = 3.0;
+  public static final double autoFailsafeScoringTime = 3.0;
   public static final double autoTapeThreshHold = 450;
   public static final double autoScoreTime = 0.1;
   
   public static final double teleautomovetime = 2.5;
   
   public static final AxisType stackHeightSelect = AxisType.kX;
+
+  public static final double driveDampMult = 0.3;
+
+
 
 }

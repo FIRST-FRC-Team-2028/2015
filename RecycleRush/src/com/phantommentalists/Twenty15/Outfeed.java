@@ -85,6 +85,8 @@ public class Outfeed {
 				stopConveyor();
 				moveStackLeft();
 				isStackOff = false;
+				timerdone = false;
+				movingfast = false;
 			}
 			if(isPusherLeft())
 			{
@@ -110,19 +112,16 @@ public class Outfeed {
 			roller.set(0.0);
 			timertask = new delay();
 			timer = new Timer();
-			timer.schedule(timertask, 750);
+			timer.schedule(timertask, Parameters.feedConveyorPuaseDelay);
 		}
 		else if(timerdone && !toteOut.get())
 		{
 			movingfast = true;
 			roller.set(Parameters.outfeedConveyorVoltageFast);
-		}
-		else if(timerdone && toteOut.get() && movingfast)
-		{
-			movingfast = false;
+			isStackOff = false;
 			timertask2 = new delay2();
 			timer2 = new Timer();
-			timer2.schedule(timertask2, 500);
+			timer2.schedule(timertask2, 2000);
 		}
 		else if(isStackOff && toteOut.get())
 		{

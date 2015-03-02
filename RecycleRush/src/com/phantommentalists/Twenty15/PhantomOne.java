@@ -34,6 +34,7 @@ public class PhantomOne extends SampleRobot {
 	private DigitalInput outfeedinput; // 3.14159265358979323846264338327950
 	private boolean autopilot = false;
 	private boolean automove = false;
+	private boolean opinit = false;
 
 	public PhantomOne() {
 
@@ -71,7 +72,7 @@ public class PhantomOne extends SampleRobot {
 					startTime = timer.get();
 					gameMech.raiseElevator();
 				} else {
-					if (timer.get() - startTime >= Parameters.autoLiftTime) {
+					if (gameMech.isElevatorUp()) {
 						gameMech.stopElevator();
 						autostate = AutoStates.carpet;
 						startTime = 0.0;
@@ -124,6 +125,7 @@ public class PhantomOne extends SampleRobot {
 			case done:
 				timer.stop();
 				drive.setDrive(0.0);
+				gameMech.lowerElevator();
 				break;
 			default:
 				break;
@@ -134,6 +136,7 @@ public class PhantomOne extends SampleRobot {
 	}
 
 	public void operatorControl() {
+		double mult = 1;
 		timer.reset();
 		timer.start();
 		double starttime = 0.0;
@@ -145,13 +148,33 @@ public class PhantomOne extends SampleRobot {
 					taperight.getAverageValue());
 			SmartDashboard.putNumber("Joystick x:", driveStick.getX());
 			SmartDashboard.putNumber("JoyStick y:", driveStick.getY());
+			SmartDashboard.putBoolean("Gyro", turnController.isEnable());
 			// SmartDashboard.putBoolean("StackerTote Inicator", );
+			if(!opinit)
+			{
+				opinit = true;
+				gameMech.deployInfeed();
+			}
+			if(driveStick.getRawButton(2))
+			{
+				mult = Parameters.driveDampMult;
+			} else {
+				mult = 1;
+			}
 			if (drive != null) {
 				if (driveStick.getRawButton(11)) {
 					gyro.reset();
 				}
+//				if(driveStick.getRawButton(7))
+//				{
+//					turnController.enable();
+//				}
+//				else
+//				{
+//					turnController.disable();
+//				}
 				if (driveStick.getTrigger()) {
-					drive.setTurn(driveStick.getTwist());
+					drive.setTurn(driveStick.getTwist() * mult);
 				} else {
 					drive.setTurn(0);
 				}
@@ -181,16 +204,18 @@ public class PhantomOne extends SampleRobot {
 						}
 					}
 				}
-				drive.setDrive(driveStick.getY());
-				drive.setStrafe(driveStick.getX());
+				drive.setDrive(driveStick.getY() * mult);
+				drive.setStrafe(driveStick.getX() * mult);
 				drive.processDrive();
 			}
 
 			if (gameMech != null) {
 				if (gmStick2.getRawButton(9)) {
+//					turnController.enable();
 					gameMech.setAutonomousStacking(true);
 				} else {
 					gameMech.setAutonomousStacking(false);
+					turnController.disable();
 					if (gmStick.getRawButton(10)) {
 						gameMech.turnStackerConveyorOn(true, gmStick2.getY());
 					} else if (gmStick.getRawButton(9)) {
