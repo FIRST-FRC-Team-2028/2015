@@ -280,9 +280,9 @@ public class PhantomOne extends SampleRobot {
 
 	public int decypher(double val) {
 		if (val < 0)
-			return (int) ((((val + 1) / 2) * 10)+0.05);
+			return (int) ((((val + 1) / 2) * 10)+1.05);
 		else {
-			return (int) (5 + (val * 4)+0.05);
+			return (int) (5 + (val * 4)+1.05);
 		}
 	}
 

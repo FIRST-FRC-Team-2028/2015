@@ -146,6 +146,13 @@ public class GameMech {
 	  {
 		  state = GameMechState.Deployed;
 	  }
+	  if(!infeed.isDeployed() || !stacker.isElevatorUp() && !autopilotinit)
+	  {
+		  infeed.deployInfeed();
+		  stacker.moveElevatorUp();
+	  } else {
+		  autopilotinit = false;
+	  }
 	  stacker.processStacker(height);
 	  outfeed.processOutfeed();
 	  infeed.processInfeed();
