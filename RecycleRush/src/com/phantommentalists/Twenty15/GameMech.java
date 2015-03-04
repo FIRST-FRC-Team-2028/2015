@@ -1,6 +1,7 @@
 package com.phantommentalists.Twenty15;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  */
@@ -15,7 +16,8 @@ public class GameMech {
     private Solenoid readyLight;
     private boolean fwd = true;
     private boolean autopilot = false;
-    private boolean move = false;
+    private boolean autopilotinit = false;
+    private boolean isStackDone = false;
 
   public GameMech()
   {
@@ -112,36 +114,48 @@ public class GameMech {
   public void unload() {
   }
 
+  public void resetStackerState()
+  {
+	  stacker.resetStackerState();
+  }
+  
+  public boolean isElevatorUp()
+  {
+	  return stacker.isElevatorUp();
+  }
+  
   public void processGameMech(int height) {
 	  if(autopilot)
 	  {
+		  SmartDashboard.putBoolean("isStackDone",stacker.isStackDone());
 		  if(stacker.isStackDone())
 		  {
+			  isStackDone = true;
+		  }
+		  if(isStackDone)
+		  {
+			  outfeed.moveStackForward(true);
 			  stacker.emptyStacker();
-			  if(stacker.isEmpty())
+			  if(outfeed.isStackOff())
 			  {
-				  move = true;
+				  isStackDone = false;
 			  }
 		  }
-	  }
-	  if(outfeed.isStackAllTheWayOut())
-	  {
-		  move = false;
 	  }
 	  if(infeed.isDeployed() && state == GameMechState.Unknown)
 	  {
 		  state = GameMechState.Deployed;
 	  }
 	  stacker.processStacker(height);
-	  outfeed.processOutfeed(move);
+	  outfeed.processOutfeed();
 	  infeed.processInfeed();
   }
   
   public void initAutoPilot()
   {
-	  infeed.deployInfeed();
-	  stacker.moveElevatorUp();
-	  outfeed.moveStackRight();
+//	  infeed.deployInfeed();
+////	  stacker.moveElevatorUp();
+//	  outfeed.moveStackRight();
   }
  
   public void setStackZero()
@@ -151,6 +165,12 @@ public class GameMech {
 		  stacker.setStackToZero();
 	  }
   }
+  
+  public boolean isInfeedDeployed()
+  {
+	  return infeed.isDeployed();
+  }
+  
   /** 
    *  This method returns true if the game mechanisms are empty, false otherwise.
    */
@@ -186,9 +206,14 @@ public class GameMech {
 	  autopilot = auto;
 	  stacker.setAutoPilot(auto);
 	  outfeed.setAutoPilot(auto);
-	  if(auto)
+	  if(auto && !autopilotinit)
 	  {
 		  initAutoPilot();
+		  autopilot = true;
+	  }
+	  else
+	  {
+		  autopilotinit = false;
 	  }
   }
 

@@ -1,9 +1,11 @@
 package com.phantommentalists.Twenty15;
 
+import java.util.TimerTask;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
  * Author: Hunter Lawrence
@@ -17,7 +19,16 @@ public class Stacker {
     private int currentstackheight = 0;
     private int desiredstackheight = -1;
     private boolean autopilot = false;
-    private boolean canAddTote = false;
+    private boolean canAddTote = true;
+    private boolean centered = false;
+    
+  public class delay extends TimerTask
+  {
+	  public void run()
+	  {
+		  centered = true;
+	  }
+  }
 
   public Stacker()
   {
@@ -33,7 +44,9 @@ public class Stacker {
 	  desiredstackheight = height;
 	  SmartDashboard.putBoolean("Stacker tote indicator", toteIndicator.get());
 	  SmartDashboard.putNumber("Stack count", currentstackheight);
+	  SmartDashboard.putNumber("Desired Stack", desiredstackheight);
 	  SmartDashboard.putString("Stacker state", state.toString());
+	  SmartDashboard.putNumber("Stacker Conveyor Current", conveyorMotor.getOutputCurrent());
 	  if(autopilot)
 	  {
 		  if(state == StackerState.Unknown)
@@ -44,11 +57,19 @@ public class Stacker {
 		  {
 			  state = StackerState.WaitingForTote;
 			  canAddTote = true;
-			  turnConveyorOn(true);
+//			  turnConveyorOn(true);
 		  }
 		  else if(state == StackerState.WaitingForTote && !toteIndicator.get())
 		  {
 			  moveElevatorDown();
+		  }
+		  
+		  else if(state == StackerState.TotePickedUp)
+		  {
+			  if(!isStackDone())
+			  {
+				  moveElevatorUp();
+			  }
 		  }
 		  else if(state == StackerState.LoweringElevator && isElevatorDown())
 		  {
@@ -71,6 +92,17 @@ public class Stacker {
 				  emptyStacker();
 			  }
 		  }
+		  if(state != StackerState.Unloading)
+		  {
+			  if(toteIndicator.get())
+			  {
+				  turnConveyorOn(true);
+			  }
+			  else
+			  {
+				  turnConveyorOn(false);
+			  }
+		  }
 	  }
 	  else
 	  {
@@ -85,6 +117,11 @@ public class Stacker {
 		  }
 	  }
 	  elevator.processElevator();
+  }
+  
+  public void resetStackerState()
+  {
+	  state = StackerState.Unknown;
   }
   
   public void setStackToZero()
@@ -109,7 +146,7 @@ public class Stacker {
    *  Returns true when the current stack is finished, false otherwise
    */
   public boolean isStackDone() {
-	  if(currentstackheight == desiredstackheight)
+	  if(currentstackheight >= desiredstackheight)
 	  {
 		  return true;
 	  }
@@ -176,6 +213,7 @@ public class Stacker {
    */
   public void moveElevatorDown() {
 	  elevator.goDown();
+	  turnConveyorOn(false);
 	  state = StackerState.LoweringElevator;
   }
   
@@ -188,18 +226,18 @@ public class Stacker {
   {
 	  if(autopilot)
 	  {
-		  if(elevator.isUp() && toteIndicator.get())
-		  {
+//		  if(toteIndicator.get())
+//		  {
+		  if(fwd)
 			  conveyorMotor.set(Parameters.stackerConveyorVoltage);
-		  }
-		  else if(elevator.isDown())
-		  {
-			  conveyorMotor.set(Parameters.stackerConveyorVoltage);
-		  }
 		  else
-		  {
-			  turnConveyorOff();
-		  }
+			  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
+
+//		  }
+//		  else
+//		  {
+//			  turnConveyorOff();
+//		  }
 	  }
 	  else
 	  {		
@@ -220,18 +258,18 @@ public class Stacker {
 		  }
 		  else
 		  {
-			  if(elevator.isUp() && toteIndicator.get())
-			  {
+//			  if(elevator.isUp() && toteIndicator.get())
+//			  {
 				  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
-			  }
-			  else if(elevator.isDown())
-			  {
-				  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
-			  }
-			  else
-			  {
-				  turnConveyorOff();
-			  }
+//			  }
+//			  else if(elevator.isDown())
+//			  {
+//				  conveyorMotor.set(-Parameters.stackerConveyorVoltage);
+//			  }
+//			  else
+//			  {
+//				  turnConveyorOff();
+//			  }
 		  }
 	  }
   }
@@ -269,20 +307,14 @@ public class Stacker {
    *  This method returns true if the elevator is up, false otherwise.
    */
   public boolean isElevatorUp() {
-	  if(elevator.isUp())
-		  return true;
-	  else
-		  return false;
+	  return elevator.isUp();
   }
 
   /** 
    *  This method returns true if the elevator is down, false otherwise.
    */
   public boolean isElevatorDown() {
-	  if(elevator.isDown())
-		  return true;
-	  else
-		  return false;
+	  return elevator.isDown();
   }
   
   public void setAutoPilot(boolean value)

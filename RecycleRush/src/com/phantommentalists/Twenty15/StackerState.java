@@ -8,6 +8,8 @@ public enum StackerState {
   Unknown,
 
   WaitingForTote,
+  
+  CenteringTote,
 
   LoweringElevator,
 

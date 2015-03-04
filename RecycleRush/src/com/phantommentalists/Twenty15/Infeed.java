@@ -16,6 +16,7 @@ public class Infeed {
     	  state = InfeedStates.retracted;
     	  infeedDeploy = new CANTalon(Parameters.infeedCANId);
     	  infeedDeploy.changeControlMode(ControlMode.PercentVbus);
+    	  infeedDeploy.enableLimitSwitch(true, false);
     	  infeedDeploy.enableControl();
       }
       
