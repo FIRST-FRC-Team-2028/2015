@@ -33,7 +33,7 @@ public class Stacker {
   public Stacker()
   {
 	  state = StackerState.Unknown;
-	  toteIndicator = new DigitalInput(2);
+	  toteIndicator = new DigitalInput(Parameters.stackerToteIndicatorInput);
 	  elevator = new Elevator(Parameters.stackerLeftCANId,Parameters.stackerRightCANId);
 	  conveyorMotor = new CANTalon(Parameters.stackerConveyorCANId);
 	  conveyorMotor.changeControlMode(ControlMode.PercentVbus);
@@ -285,6 +285,12 @@ public class Stacker {
   public StackerState getState() {
 	  return state;
   }
+  
+  public int getStackHeight()
+  {
+	  return currentstackheight;
+  }
+  
   public boolean isConveyorOn()
   {
 	  if(conveyorMotor.getBusVoltage() != 0.0)

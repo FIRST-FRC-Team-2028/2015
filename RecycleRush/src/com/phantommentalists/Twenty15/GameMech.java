@@ -85,7 +85,7 @@ public class GameMech {
   
   public void turnOutFeedConveyorOn(boolean fwd)
   {
-	  outfeed.moveStackForward(fwd);
+	  outfeed.moveStackForward(fwd,stacker.getStackHeight());
   }
   
   public void turnOutFeedConveyorOff()
@@ -134,7 +134,7 @@ public class GameMech {
 		  }
 		  if(isStackDone)
 		  {
-			  outfeed.moveStackForward(true);
+			  outfeed.moveStackForward(true,stacker.getStackHeight());
 			  stacker.emptyStacker();
 			  if(outfeed.isStackOff())
 			  {

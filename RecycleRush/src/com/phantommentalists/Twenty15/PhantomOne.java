@@ -22,9 +22,9 @@ public class PhantomOne extends SampleRobot {
 	private TurnPIDOut turnPIDOut;
 	private PIDController turnController;
 	private Joystick driveStick;
-	private Joystick gmStick;
-	private Joystick gmStick2;
-	private Joystick launchPad;
+	private Joystick buttonStick;
+	private Joystick switchStick;
+	private Joystick axisStick;
 	private int t = 0;
 	private boolean passedPlatform = false; // 3.14159265358979323846264338327950
 	private boolean driving = true;
@@ -45,10 +45,10 @@ public class PhantomOne extends SampleRobot {
 				Parameters.steeringProportionalValue,
 				Parameters.steeringIntegralValue,
 				Parameters.steeringDerivativeValue, gyro, turnPIDOut);
-		driveStick = new Joystick(0); // 3.14159265358979323846267338327950
-		gmStick = new Joystick(1);
-		gmStick2 = new Joystick(2);
-		launchPad = new Joystick(3);
+		driveStick = new Joystick(Parameters.driveStickId); // 3.14159265358979323846267338327950
+		buttonStick = new Joystick(Parameters.buttonStickId);
+		switchStick = new Joystick(Parameters.buttonStickId);
+		axisStick = new Joystick(Parameters.axisStickId);
 		gameMech = new GameMech(); // 3.14159265358979323846264338327950
 		tapeleft = new AnalogInput(Parameters.tapeLeftAnalogIn);
 		taperight = new AnalogInput(Parameters.taperightAnalogIn);
@@ -62,17 +62,27 @@ public class PhantomOne extends SampleRobot {
 		gyro.reset();
 		timer.reset();
 		timer.start();
+		int autoChoice = decypher(axisStick.getAxis(Parameters.AutoSelect));
+		boolean rc;
+		boolean tote;
 		while (isAutonomous() && isEnabled()) {
 			SmartDashboard.putNumber("Match Time", timer.get());
 			SmartDashboard.putString("Autostate ", autostate.toString());
 			turnController.disable();
 			switch (autostate) {
 			case lifttote:
+				if(autoChoice == 1)
+				{
+					autostate = AutoStates.done;
+					break;
+				}
 				if (startTime == 0.0) {
 					startTime = timer.get();
 					gameMech.raiseElevator();
 				} else {
-					if (gameMech.isElevatorUp()) {
+					rc = gameMech.isElevatorUp() && autoChoice == 3;
+					tote = timer.get()-startTime >= Parameters.autoLiftTime && autoChoice == 2;
+					if (rc || tote) {
 						gameMech.stopElevator();
 						autostate = AutoStates.carpet;
 						startTime = 0.0;
@@ -91,12 +101,11 @@ public class PhantomOne extends SampleRobot {
 					startTime = 0.0;
 				} else if (timer.get() - startTime > Parameters.autoFailsafeCarpetTime) {
 					// Fail Safe Should never get here
-					// drive.setDrive(0.0);
-					// turnController.disable();
+					 drive.setDrive(0.0);
+					 turnController.disable();
 				} else {
 					drive.setDrive(-0.5);
 				}
-				// drive.processDrive();
 				break;
 			case scoring:
 				if (startTime == 0.0) {
@@ -210,55 +219,55 @@ public class PhantomOne extends SampleRobot {
 			}
 
 			if (gameMech != null) {
-				if (gmStick2.getRawButton(9)) {
+				if (switchStick.getRawButton(1)) {
 //					turnController.enable();
 					gameMech.setAutonomousStacking(true);
 				} else {
 					gameMech.setAutonomousStacking(false);
 					turnController.disable();
-					if (gmStick.getRawButton(10)) {
-						gameMech.turnStackerConveyorOn(true, gmStick2.getY());
-					} else if (gmStick.getRawButton(9)) {
-						gameMech.turnStackerConveyorOn(false, gmStick2.getY());
+					if (buttonStick.getRawButton(10)) {
+						gameMech.turnStackerConveyorOn(true, switchStick.getY());
+					} else if (buttonStick.getRawButton(9)) {
+						gameMech.turnStackerConveyorOn(false, switchStick.getY());
 					} else {
 						gameMech.turnStackerConveyorOff();
 					}
 					//
-					if (gmStick.getRawButton(4)) {
+					if (buttonStick.getRawButton(4)) {
 						gameMech.raiseElevator();
-					} else if (gmStick.getRawButton(3)) {
+					} else if (buttonStick.getRawButton(3)) {
 						gameMech.lowerElevator();
 					} else {
 						gameMech.stopElevator();
 					}
 					//
-					if (gmStick.getRawButton(8)) {
-						if (gmStick2.getX() >= 0 && gmStick2.getX() < 1)
+					if (buttonStick.getRawButton(8)) {
+//						if (gmStick2.getX() >= 0 && gmStick2.getX() < 1)
 							gameMech.turnOutFeedConveyorOn(true);
-						else if (gmStick.getX() <= 0 && gmStick2.getX() > -1)
-							gameMech.turnOutFeedConveyorOn(true);
-					} else if (gmStick.getRawButton(7)) {
+//						else if (gmStick.getX() <= 0 && gmStick2.getX() > -1)
+//							gameMech.turnOutFeedConveyorOn(true);
+					} else if (buttonStick.getRawButton(7)) {
 						// TODO:DONT DO THIS
 						gameMech.turnOutFeedConveyorOn(false);
 					} else {
 						gameMech.turnOutFeedConveyorOff();
 					}
 	
-					if (gmStick.getRawButton(5)) {
+					if (buttonStick.getRawButton(5)) {
 						gameMech.deployInfeed();
-					} else if (gmStick.getRawButton(6)) {
+					} else if (buttonStick.getRawButton(6)) {
 						gameMech.retractInfeed();
 					} else {
 						gameMech.stopInfeed();
 					}
-					if (gmStick.getRawButton(1)) {
+					if (buttonStick.getRawButton(1)) {
 						gameMech.moveOutFeedArmLeft();
 						if(!turnController.isEnable())
 						{
 							turnController.enable();
 							gyro.reset();
 						}
-					} else if (gmStick.getRawButton(2)) {
+					} else if (buttonStick.getRawButton(2)) {
 						gameMech.moveOutFeedArmRight();
 						if(!turnController.isEnable())
 						{
@@ -270,7 +279,7 @@ public class PhantomOne extends SampleRobot {
 						if(turnController.isEnable())turnController.disable();
 					}
 				}
-				gameMech.processGameMech(decypher(launchPad
+				gameMech.processGameMech(decypher(axisStick
 						.getAxis(Parameters.stackHeightSelect)));
 
 			}

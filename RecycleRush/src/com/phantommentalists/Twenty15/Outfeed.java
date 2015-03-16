@@ -26,6 +26,7 @@ public class Outfeed {
 	private OutfeedStates state;
 	private boolean isStackOff = false;
 	private boolean movingfast = false;
+	private boolean skippause = false;
 	
 	private class delay extends TimerTask
 	{
@@ -97,7 +98,7 @@ public class Outfeed {
 	/**
 	 * This method will move a stack forward in the outfeed.
 	 */
-	public void moveStackForward(boolean fwd) {
+	public void moveStackForward(boolean fwd,int stackheight) {
 		if(!fwd)
 		{
 			roller.set(-Parameters.outfeedConveyorVoltageSlow);
@@ -110,9 +111,16 @@ public class Outfeed {
 		else if(!toteOut.get() && !timerdone)
 		{
 			roller.set(0.0);
-			timertask = new delay();
-			timer = new Timer();
-			timer.schedule(timertask, Parameters.feedConveyorPuaseDelay);
+			if(stackheight == 5)
+			{
+				timertask = new delay();
+				timer = new Timer();
+				timer.schedule(timertask, Parameters.feedConveyorPuaseDelay);
+			}
+			else
+			{
+				timerdone = true;
+			}
 		}
 		else if(timerdone && !toteOut.get())
 		{
@@ -137,7 +145,7 @@ public class Outfeed {
 	}
 	
 	public void stopConveyor() {
-		roller.set(0.00000000000000000000);
+		roller.set(0.00000000000000000000); // Not enough decimal places
 	}
 
 	/**

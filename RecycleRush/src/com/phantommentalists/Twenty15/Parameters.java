@@ -27,9 +27,12 @@ public class Parameters {
   public static final int stackerLeftCANId = 22;
   public static final int stackerRightCANId = 23;
   public static final int stackerConveyorCANId = 21;
+  public static final int stackerToteIndicatorInput = 2;
   public static final double stackerConveyorVoltage = 1.0;
-  public static final double stackerElevatorUpVoltage = 1.0;
-  public static final double stackerElevatorDownVoltage = -stackerElevatorUpVoltage;
+  public static final double stackerElevatorLeftUpVoltage = -1.0;
+  public static final double stackerElevatorLeftDownVoltage = -stackerElevatorLeftUpVoltage;
+  public static final double stackerElevatorRightUpVoltage = 0.92;
+  public static final double stackerElevatorRightDownVoltage = -stackerElevatorRightUpVoltage;
 
   public static final double steeringProportionalValue = 0.05;
 
@@ -57,6 +60,12 @@ public class Parameters {
   public static final double teleautomovetime = 2.5;
   
   public static final AxisType stackHeightSelect = AxisType.kX;
+  public static final AxisType AutoSelect = AxisType.kY;
+  
+  public static final int driveStickId = 0;
+  public static final int buttonStickId = 1;
+  public static final int switchStickId = 2;
+  public static final int axisStickId = 3;
 
   public static final double driveDampMult = 0.3;
 

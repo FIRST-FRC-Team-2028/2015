@@ -46,16 +46,16 @@ public class Elevator {
    *  This method moves the elevator side to the up position.
    */
   public void goUp() {
-	  leftMotor.set(-1.0);
-	  rightMotor.set(0.92);
+	  leftMotor.set(Parameters.stackerElevatorLeftUpVoltage);
+	  rightMotor.set(Parameters.stackerElevatorRightUpVoltage);
   }
 
   /** 
    *  This method moves the elevator side to the down position
    */
   public void goDown() {
-	  leftMotor.set(1.0);
-	  rightMotor.set(-0.92);
+	  leftMotor.set(Parameters.stackerElevatorLeftDownVoltage);
+	  rightMotor.set(Parameters.stackerElevatorRightDownVoltage);
   }
   /**
    *  This method stops the elevator side
