@@ -18,6 +18,7 @@ public class GameMech {
     private boolean autopilot = false;
     private boolean autopilotinit = false;
     private boolean isStackDone = false;
+    private boolean movingstack =false;
 
   public GameMech()
   {
@@ -129,10 +130,9 @@ public class GameMech {
 	  {
 		  SmartDashboard.putBoolean("isStackDone",stacker.isStackDone());
 		  if(stacker.isStackDone())
-		  {
-			  isStackDone = true;
+		  {			  isStackDone = true;
 		  }
-		  if(isStackDone)
+		  if(isStackDone && !movingstack)
 		  {
 			  outfeed.moveStackForward(true,stacker.getStackHeight());
 			  stacker.emptyStacker();

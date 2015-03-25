@@ -29,10 +29,10 @@ public class Parameters {
   public static final int stackerConveyorCANId = 21;
   public static final int stackerToteIndicatorInput = 2;
   public static final double stackerConveyorVoltage = 1.0;
-  public static final double stackerElevatorLeftUpVoltage = -1.0;
-  public static final double stackerElevatorLeftDownVoltage = -stackerElevatorLeftUpVoltage;
-  public static final double stackerElevatorRightUpVoltage = 0.92;
-  public static final double stackerElevatorRightDownVoltage = -stackerElevatorRightUpVoltage;
+  public static final double stackerElevatorLeftUpVoltage = -0.99;
+  public static final double stackerElevatorLeftDownVoltage = 1.0;
+  public static final double stackerElevatorRightUpVoltage = 1.0;
+  public static final double stackerElevatorRightDownVoltage = -1.0;
 
   public static final double steeringProportionalValue = 0.05;
 
@@ -50,7 +50,7 @@ public class Parameters {
   public static final int tapeLeftAnalogIn = 3;
   public static final int taperightAnalogIn = 2;
   
-  public static final double autoLiftTime = 0.6;
+  public static final double autoLiftTime = 0.3;
   public static final double autoDrivePower = 0.5;
   public static final double autoFailsafeCarpetTime = 3.0;
   public static final double autoFailsafeScoringTime = 3.0;

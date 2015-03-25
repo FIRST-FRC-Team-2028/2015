@@ -47,7 +47,7 @@ public class PhantomOne extends SampleRobot {
 				Parameters.steeringDerivativeValue, gyro, turnPIDOut);
 		driveStick = new Joystick(Parameters.driveStickId); // 3.14159265358979323846267338327950
 		buttonStick = new Joystick(Parameters.buttonStickId);
-		switchStick = new Joystick(Parameters.buttonStickId);
+		switchStick = new Joystick(Parameters.switchStickId);
 		axisStick = new Joystick(Parameters.axisStickId);
 		gameMech = new GameMech(); // 3.14159265358979323846264338327950
 		tapeleft = new AnalogInput(Parameters.tapeLeftAnalogIn);
@@ -71,6 +71,11 @@ public class PhantomOne extends SampleRobot {
 			turnController.disable();
 			switch (autostate) {
 			case lifttote:
+				if(autoChoice==4)
+				{
+					autostate = AutoStates.carpet;
+					break;
+				}
 				if(autoChoice == 1)
 				{
 					autostate = AutoStates.done;
@@ -103,7 +108,11 @@ public class PhantomOne extends SampleRobot {
 					// Fail Safe Should never get here
 					 drive.setDrive(0.0);
 					 turnController.disable();
-				} else {
+				}
+				if(autoChoice == 4)
+				{
+					drive.setDrive(-0.5);
+				}else{
 					drive.setDrive(-0.5);
 				}
 				break;
@@ -134,7 +143,14 @@ public class PhantomOne extends SampleRobot {
 			case done:
 				timer.stop();
 				drive.setDrive(0.0);
-				gameMech.lowerElevator();
+				if(autoChoice != 4 || autoChoice != 1)
+				{
+					gameMech.lowerElevator();
+				}
+				else
+				{
+					gameMech.raiseElevator();
+				}
 				break;
 			default:
 				break;
@@ -289,9 +305,9 @@ public class PhantomOne extends SampleRobot {
 
 	public int decypher(double val) {
 		if (val < 0)
-			return (int) ((((val + 1) / 2) * 10)+0.05);
+			return 1+(int) ((((val + 1) / 2) * 10)+0.05);
 		else {
-			return (int) (5 + (val * 4)+0.05);
+			return 1+(int) (5 + (val * 4)+0.05);
 		}
 	}
 

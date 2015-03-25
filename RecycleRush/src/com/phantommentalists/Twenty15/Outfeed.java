@@ -16,7 +16,7 @@ public class Outfeed {
 	private CANTalon pusher;
 	private CANTalon roller;
 	private DigitalInput toteOut;
-	private boolean left = false;
+	private boolean rightfull = false;
 	private TimerTask timertask;
 	private TimerTask timertask2;
 	private Timer timer;
@@ -25,8 +25,13 @@ public class Outfeed {
 	private boolean autopilot = false;
 	private OutfeedStates state;
 	private boolean isStackOff = false;
+	private boolean stackMoving = false;
+	private boolean left = false;
 	private boolean movingfast = false;
-	private boolean skippause = false;
+	private boolean movestack = false;
+	private boolean timer1sech = false;
+	private boolean timer2sech = false;
+	private int stacks = 0;
 	
 	private class delay extends TimerTask
 	{
@@ -40,6 +45,7 @@ public class Outfeed {
 	{
 		public void run(){
 			isStackOff = true;
+			System.out.println("delay2");
 		}
 	}
 	
@@ -66,32 +72,43 @@ public class Outfeed {
 		SmartDashboard.putBoolean("Outfeed tote indicator", toteOut.get());
 		SmartDashboard.putNumber("Outfeed current",pusher.getOutputCurrent());
 		SmartDashboard.putNumber("Outfeed roller voltage",roller.getOutputVoltage());
+		SmartDashboard.putNumber("Outfeed stacks right",stacks);
+		SmartDashboard.putBoolean("Outfeed can left", rightfull);
 		
 		if(autopilot)
 		{
-			if(!pusher.isFwdLimitSwitchClosed() || !pusher.isRevLimitSwitchClosed())
-			{
-				state = OutfeedStates.movingarm;
-			}
-			else if(roller.getOutputVoltage() > 0 || !toteOut.get())
-			{
-				state = OutfeedStates.conveying;
-			}
-			else
-			{
-				state = OutfeedStates.ready;
-			}
-			if(isStackOff && autopilot)
+//			if(!pusher.isFwdLimitSwitchClosed() || !pusher.isRevLimitSwitchClosed())
+//			{
+//				state = OutfeedStates.movingarm;
+//			}
+//			else if(roller.getOutputVoltage() > 0 || !toteOut.get())
+//			{
+//				state = OutfeedStates.conveying;
+//			}
+//			else
+//			{
+//				state = OutfeedStates.ready;
+//			}
+//			
+			if(isStackOff)
 			{
 				stopConveyor();
-				moveStackLeft();
+				stacks++;
+				System.out.println("stack off");
+//				if(stacks == 2 || stacks ==4)
+//					moveStackRight();
+//				else
+//				moveStackLeft();
+				timer = null;
+				timer2 = null;
+				timertask = null;
+				timertask2 = null;
+				timer1sech=false;
+				timer2sech=false;
+				stackMoving = true;
 				isStackOff = false;
 				timerdone = false;
 				movingfast = false;
-			}
-			if(isPusherLeft())
-			{
-				moveStackRight();
 			}
 		}
 	}
@@ -99,6 +116,7 @@ public class Outfeed {
 	 * This method will move a stack forward in the outfeed.
 	 */
 	public void moveStackForward(boolean fwd,int stackheight) {
+		stackMoving = true;
 		if(!fwd)
 		{
 			roller.set(-Parameters.outfeedConveyorVoltageSlow);
@@ -113,9 +131,19 @@ public class Outfeed {
 			roller.set(0.0);
 			if(stackheight == 5)
 			{
-				timertask = new delay();
-				timer = new Timer();
-				timer.schedule(timertask, Parameters.feedConveyorPuaseDelay);
+				if(timertask==null)
+				{
+					timertask = new delay();
+				}
+				if(timer==null)
+				{
+					timer = new Timer();
+				}
+				if(timer1sech == false)
+				{
+					timer.schedule(timertask, Parameters.feedConveyorPuaseDelay);
+					timer1sech = true;
+				}
 			}
 			else
 			{
@@ -127,13 +155,30 @@ public class Outfeed {
 			movingfast = true;
 			roller.set(Parameters.outfeedConveyorVoltageFast);
 			isStackOff = false;
-			timertask2 = new delay2();
-			timer2 = new Timer();
-			timer2.schedule(timertask2, 2000);
+			if(timertask2 == null)
+			{
+				timertask2 = new delay2();
+			}
+			if(timer2 == null)
+			{
+				timer2 = new Timer();
+			}
+			if(timer2sech == false)
+			{
+				timer2.schedule(timertask2, 2000);
+				timer2sech = true;
+			}
 		}
 		else if(isStackOff && toteOut.get())
 		{
-			roller.set(0.0);
+			if(isPusherLeft())
+			{
+				moveStackRight();
+			}
+			else if(isPusherRight())
+			{
+				moveStackLeft();
+			}
 			movingfast = false;
 			timerdone = false;
 		}
